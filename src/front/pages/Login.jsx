@@ -30,67 +30,79 @@ export const Login = () => {
 
     return (
         <>
-        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "15vh" }}> 
-     
-        <h1 className="text-info">Inicio de sesión - App de Habitos </h1>
-        
-        </div>
-        <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: "80vh" }}>
-            <div className="card shadow-lg p-4" style={{ width: "100%", maxWidth: "500px", borderRadius: "15px" }}>
-                <div className="text-center mb-4">
-                    <h2 className="fw-bold text-info">Login</h2>
-                    <p className="text-muted">Inicia sesión si ya tienes una cuenta</p>
-                </div>
-                {error && (
-                    <div className="alert alert-danger py-2 text-center animate__animated animate__shakeX" role="alert">
-                        <i className="fa-solid fa-triangle-exclamation me-2"></i>Autenticación incorrecta, por favor verifica tus credenciales.
-                    </div>
-                    
-                )}
-                <form onSubmit={handleLogin}>
-                    <div className="mb-3">
-                        <label className="form-label fw-semibold">Ingresa tu Correo</label>
-                        <div className="input-group">
-                            <span className="input-group-text bg-light"><i className="fa-regular fa-envelope"></i></span>
-                            <input
-                                className="form-control"
-                                type="email"
-                                placeholder="test@email.com"
-                                required
-                                onChange={e => setEmail(e.target.value)}
-                            />
-                        </div>
-                    </div>
+            <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light p-2">
+                <div className="card shadow-lg border-0 overflow-hidden" style={{ maxWidth: "900px", borderRadius: "24px" }}>
+                    <div className="row g-0">
 
-                    <div className="mb-4">
-                        <label className="form-label fw-semibold">Ingresa tu Contraseña</label>
-                        <div className="input-group">
-                            <span className="input-group-text bg-light"><i className="fa-solid fa-lock"></i></span>
-                            <input
-                                className="form-control"
-                                type="password"
-                                placeholder="********"
-                                required
-                                onChange={e => setPassword(e.target.value)}
-                            />
+
+                        <div className="col-12 col-md-5 bg-gradient-blue d-flex flex-column justify-content-center align-items-center p-5 text-white text-center order-first">
+                            <div className="bg-white p-3 rounded-circle mb-3 shadow">
+                                <i className="fa-solid fa-leaf text-info fs-1"></i>
+                            </div>
+                            <h2 className="fw-bold">¡Bienvenido!</h2>
+                            <p className="small opacity-75">Continúa con tus hábitos saludables y alcanza tus metas hoy.</p>
+                        </div>
+
+
+                        <div className="col-12 col-md-7 bg-white p-4 p-lg-5">
+                            <div className="mb-4">
+                                <h1 className="fw-bold">¡Hola!</h1>
+                                <p className="text-muted">Inicia sesión en tu cuenta</p>
+                            </div>
+
+                            {error && (
+                                <div className="alert alert-danger border-0 small py-2">
+                                    Credenciales incorrectas.
+                                </div>
+                            )}
+
+                            <form onSubmit={handleLogin}>
+                                <div className="mb-4 position-relative">
+                                    <i className="fa-regular fa-envelope position-absolute top-50 start-0 translate-middle-y text-muted"></i>
+                                    <input
+                                        className="form-control input-underlined"
+                                        type="email"
+                                        placeholder="Correo electrónico"
+                                        required
+                                        onChange={e => setEmail(e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="mb-4 position-relative">
+                                    <i className="fa-solid fa-lock position-absolute top-50 start-0 translate-middle-y text-muted"></i>
+                                    <input
+                                        className="form-control input-underlined"
+                                        type="password"
+                                        placeholder="Contraseña"
+                                        required
+                                        onChange={e => setPassword(e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="d-flex justify-content-between mb-4 small">
+                                    <div className="form-check">
+                                        <input className="form-check-input" type="checkbox" id="remember" />
+                                        <label className="form-check-label text-muted" htmlFor="remember">Recuérdame</label>
+                                    </div>
+                                </div>
+
+                                <button className="btn btn-primary login-btn w-100 text-white" type="submit">
+                                    Iniciar sesión
+                                </button>
+                            </form>
+
+                            <div className="text-center mt-5">
+                                <p className="small text-muted">
+                                    ¿No tienes cuenta?
+                                    <span className="text-primary fw-bold ms-1" style={{ cursor: "pointer" }} onClick={() => navigate("/registro")}>
+                                        Registrarse
+                                    </span>
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    <button className="btn btn-info w-100 py-2 fw-bold text-bg-light" type="submit" style={{ borderRadius: "8px" }}> <i className="fa-solid fa-right-to-bracket me-2"></i> Inicio de Sesión
-                    </button>
-                </form>
-                <div className="text-center mt-4">
-                    <p className="small mb-0">¿No tienes cuenta?
-                        <span
-                            className="text-primary fw-bold ms-1"
-                            style={{ cursor: "pointer", textDecoration: "underline" }}
-                            onClick={() => navigate("/registro")}
-                        >
-                            Registrarse
-                        </span>
-                    </p>
                 </div>
             </div>
-        </div>
-           </>
+        </>
     );
 };

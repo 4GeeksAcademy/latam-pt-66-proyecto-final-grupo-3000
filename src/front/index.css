@@ -1,0 +1,34 @@
+/* Estilos extra al Login */
+.bg-gradient-blue {
+    background: linear-gradient(180deg, #1a73e8 0%, #004ba0 100%);
+    border-radius: 0 0 40px 40px;
+}
+
+@media (min-width: 768px) {
+    .bg-gradient-blue {
+        border-radius: 24px 0 0 24px;
+    }
+}
+
+.input-underlined {
+    border: none;
+    border-bottom: 2px solid #eee;
+    border-radius: 0;
+    padding-left: 35px;
+    transition: border-color 0.3s;
+}
+
+.input-underlined:focus {
+    box-shadow: none;
+    border-bottom-color: #1a73e8;
+}
+
+.login-btn {
+    background: linear-gradient(90deg, #1a73e8, #00d2ff);
+    border: none;
+    border-radius: 50px;
+    padding: 12px;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(26, 115, 232, 0.3);
+}
+
