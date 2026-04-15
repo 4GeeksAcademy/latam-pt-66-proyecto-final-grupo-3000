@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 export const Navbar = () => {
-
+	const token = sessionStorage.getItem("token") ? "Logout" : "Login";
 	return (
 		<nav className="navbar navbar-light bg-light">
 			<div className="container">
@@ -9,10 +9,11 @@ export const Navbar = () => {
 					<span className="navbar-brand mb-0 h1">React Boilerplate</span>
 				</Link>
 				<div className="ml-auto">
-					<Link to="/demo">
-						<button className="btn btn-primary">Check the Context in action</button>
+					<Link to="/login">
+						<button className="btn btn-primary me-2"><i className="fa-solid fa-right-to-bracket"></i> Ingresar</button>
 					</Link>
 				</div>
+
 			</div>
 		</nav>
 	);
