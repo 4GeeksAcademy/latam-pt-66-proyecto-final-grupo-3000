@@ -34,7 +34,6 @@ export const Login = () => {
                 <div className="card shadow-lg border-0 overflow-hidden" style={{ maxWidth: "900px", borderRadius: "24px" }}>
                     <div className="row g-0">
 
-
                         <div className="col-12 col-md-5 bg-gradient-blue d-flex flex-column justify-content-center align-items-center p-5 text-white text-center order-first">
                             <div className="bg-white p-3 rounded-circle mb-3 shadow">
                                 <i className="fa-solid fa-leaf text-info fs-1"></i>
@@ -42,8 +41,6 @@ export const Login = () => {
                             <h2 className="fw-bold">¡Bienvenido!</h2>
                             <p className="small opacity-75">Continúa con tus hábitos saludables y alcanza tus metas hoy.</p>
                         </div>
-
-
                         <div className="col-12 col-md-7 bg-white p-4 p-lg-5">
                             <div className="mb-4">
                                 <h1 className="fw-bold">¡Hola!</h1>
