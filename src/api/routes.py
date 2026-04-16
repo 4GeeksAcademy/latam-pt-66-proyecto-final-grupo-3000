@@ -3,6 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User
+from api.models import db, Habit 
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -20,3 +21,21 @@ def handle_hello():
     }
 
     return jsonify(response_body), 200
+
+
+
+@api.route('/habits', methods=['POST'])
+def handle_create_habit():
+    body = request.get_json()
+    
+    new_habit = Habit(
+        name=body['name'],
+        description=body.get('description', ""), 
+        is_active=True
+    )
+    db.session.add(new_habit)
+    db.session.commit()
+   
+    return jsonify(new_habit.serialize()), 201
+
+ 
