@@ -1,6 +1,6 @@
 /* Estilos extra al Login */
 .bg-gradient-blue {
-    background: linear-gradient(180deg, #1a73e8 0%, #004ba0 100%);
+    background: linear-gradient(180deg, #1aa3e8 0%, #02358c 100%);
     border-radius: 0 0 40px 40px;
 }
 
@@ -30,5 +30,15 @@
     padding: 12px;
     font-weight: bold;
     box-shadow: 0 4px 15px rgba(26, 115, 232, 0.3);
+}
+
+.main_Home{
+    height: 80vh;
+}
+.main_Login{
+    height: 80vh;
+}
+.title_form{
+    color: #1a73e8;
 }
 
