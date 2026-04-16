@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+const backendUrl = import.meta.env.VITE_BACKEND_URL + "/api/login";
 
 export const Login = () => {
     const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ export const Login = () => {
         e.preventDefault();
         setError(false);
 
-        const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/login", {
+        const response = await fetch(backendUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password })
@@ -68,7 +69,7 @@ export const Login = () => {
 
                         <div className="col-12 col-md-7 bg-white p-4 p-lg-5">
                             <div className="mb-4">
-                                <h1 className="fw-bold title_form">App Habit Tracker</h1>
+                                <h1 className="fw-bold title_form">¡Hola!</h1>
                                 <p className="text-muted">Inicia sesión en tu cuenta</p>
                             </div>
 
