@@ -1,6 +1,6 @@
 /* Estilos extra al Login */
 .bg-gradient-blue {
-    background: linear-gradient(180deg, #1a73e8 0%, #004ba0 100%);
+    background: linear-gradient(180deg, #1aa3e8 0%, #02358c 100%);
     border-radius: 0 0 40px 40px;
 }
 
@@ -31,4 +31,39 @@
     font-weight: bold;
     box-shadow: 0 4px 15px rgba(26, 115, 232, 0.3);
 }
+/*Acá pueden colocar el tamaño de alto de cada componente para adaptarla a la pantalla y que el footer quede en la parte inferior*/
+.main_Home{
+    height: 80vh;
+}
+.main_Login{
+    height: 80vh;
+}
 
+/*pequeños cambios de estilos al login*/
+.title_form{
+    color: #1a73e8;
+}
+h2{
+    color: #ededed;
+    font-size: 40px;
+}
+
+/*mejoras al inicio Home adicional solo estilos para una mejor visualización*/
+.home-container {
+    background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-circle {
+    background: linear-gradient(135deg, #1a73e8 0%, #004ba0 100%);
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 8px 20px rgba(26, 115, 232, 0.3);
+}
