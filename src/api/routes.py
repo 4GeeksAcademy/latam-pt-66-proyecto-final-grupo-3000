@@ -1,35 +1,55 @@
-"""
-This module takes care of starting the API Server, Loading the DB and Adding the endpoints
-"""
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
 CORS(api)
 
-@api.route('/login', methods=['POST'])
-def handle_login(): 
-    email = request.json.get("email", None)
-    password = request.json.get("password", None)
-    
-    user = User.query.filter_by(email=email, password=password).first()
-    
-    if user is None:
-        return jsonify({"msg":"Email o contraseña incorrectas"}), 401
-    
-    access_token = create_access_token(identity=str(user.id))
-    return jsonify({"token": access_token, "user_id": user.id}), 200
-
-@api.route('/hello', methods=['GET'])
+# 1. RUTA DE PRUEBA (SOLO UNA)
+@api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
+    return jsonify({"message": "Servidor funcionando"}), 200
 
-    response_body = {
-        "message": "Backend conectado"
-    }
+# 2. RUTA DE LOGIN (ALFREDO)
+@api.route('/login', methods=['POST'])
+def handle_login():
+    body = request.get_json()
+    if body is None:
+        return jsonify({"msg": "Cuerpo vacío"}), 400
+    
+    email = body.get("email")
+    password = body.get("password")
+    user = User.query.filter_by(email=email, password=password).first()
 
-    return jsonify(response_body), 200
+    if user is None:
+        return jsonify({"msg": "Credenciales incorrectas"}), 401
+    return jsonify({"msg": "Login exitoso", "user_id": user.id}), 200
+
+# 3. RUTA DE REGISTRO (TUYA)
+@api.route('/signup', methods=['POST'])
+def handle_signup():
+    body = request.get_json()
+    if body is None:
+        return jsonify({"msg": "Cuerpo vacío"}), 400
+    
+    email = body.get("email")
+    password = body.get("password")
+
+    if not email or not password:
+        return jsonify({"msg": "Email y password obligatorios"}), 400
+
+    user_exists = User.query.filter_by(email=email).first()
+    if user_exists:
+        return jsonify({"msg": "El usuario ya existe"}), 400
+
+    new_user = User(email=email, password=password, is_active=True)
+    try:
+        db.session.add(new_user)
+        db.session.commit()
+        return jsonify({"msg": "Usuario creado"}), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"msg": "Error de servidor", "error": str(e)}), 500
