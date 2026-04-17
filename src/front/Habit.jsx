@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 export const HabitsPage = () => {
     const [habits, setHabits] = useState([]);
     const [formData, setFormData] = useState({ name: "", description: "" });
-    const backendUrl = "https://improved-fiesta-r4q457wqx4972pgq7-3001.app.github.dev/api/habits";
+    const backendUrl = import.meta.env.VITE_BACKEND_URL + "/api/habits";
 
     const getHabits = async () => {
         try {
