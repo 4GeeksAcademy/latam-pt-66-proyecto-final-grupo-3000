@@ -10,7 +10,7 @@ import { Single } from "./pages/Single";
 import { Demo } from "./pages/Demo";
 import { Login } from "./pages/Login.jsx";
 import { Registro } from "./pages/Registro.jsx"; // <--- 1. IMPORTACIÓN AGREGADA
-
+import { HabitsPage } from "./Habit.jsx"; // <--- 1. IMPORTACIÓN AGREGADA
 export const router = createBrowserRouter(
   createRoutesFromElements(
     // CreateRoutesFromElements function allows you to build route elements declaratively.
