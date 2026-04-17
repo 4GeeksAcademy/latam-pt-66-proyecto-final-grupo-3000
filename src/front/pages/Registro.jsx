@@ -1,62 +1,91 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 
 export const Registro = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const navigate = useNavigate();
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
+	const [error, setError] = useState(null);
+	const [success, setSuccess] = useState(false);
+	const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        
-        const response = await fetch("https://organic-disco-wr9jv5wp64x535gp6-3001.app.github.dev/api/signup", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                "email": email,
-                "password": password
-            })
-        });
+	const handleRegistro = async (e) => {
+		e.preventDefault();
+		setError(null);
 
-        if (response.ok) {
-            alert("¡Usuario registrado con éxito!");
-            navigate("/login");
-        } else {
-            const errorData = await response.json();
-            alert("Error: " + errorData.msg);
-        }
-    };
+		if (password !== confirmPassword) {
+			setError("Las contraseñas no coinciden");
+			return;
+		}
 
-    return (
-        <div className="container mt-5 w-50">
-            <h2 className="text-center mb-4">Registro de Usuario</h2>
-            <form onSubmit={handleSubmit} className="border p-4 shadow-sm bg-light rounded">
-                <div className="mb-3">
-                    <label className="form-label">Correo Electrónico</label>
-                    <input
-                        type="email"
-                        className="form-control"
-                        placeholder="ejemplo@correo.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Contraseña</label>
-                    <input
-                        type="password"
-                        className="form-control"
-                        placeholder="Mínimo 6 caracteres"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                <button type="submit" className="btn btn-success w-100">
-                    Crear mi cuenta
-                </button>
-            </form>
-        </div>
-    );
+		const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/registro", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ email, password })
+		});
+
+		if (response.ok) {
+			setSuccess(true);
+			setTimeout(() => navigate("/login"), 2000);
+		} else {
+			const data = await response.json();
+			setError(data.msg || "Error al registrarse");
+		}
+	};
+
+	return (
+		<div className="container d-flex justify-content-center align-items-center" style={{ minHeight: "80vh" }}>
+			<div className="card shadow" style={{ width: "100%", maxWidth: "420px" }}>
+				<div className="card-body p-4">
+					<h3 className="card-title text-center mb-4">
+						<i className="fa-solid fa-user-plus me-2 text-primary"></i>Crear Cuenta
+					</h3>
+					{error && <div className="alert alert-danger">{error}</div>}
+					{success && <div className="alert alert-success">¡Registro exitoso! Redirigiendo...</div>}
+					<form onSubmit={handleRegistro}>
+						<div className="mb-3">
+							<label className="form-label">Correo electrónico</label>
+							<input
+								type="email"
+								className="form-control"
+								value={email}
+								onChange={e => setEmail(e.target.value)}
+								placeholder="correo@ejemplo.com"
+								required
+							/>
+						</div>
+						<div className="mb-3">
+							<label className="form-label">Contraseña</label>
+							<input
+								type="password"
+								className="form-control"
+								value={password}
+								onChange={e => setPassword(e.target.value)}
+								placeholder="Mínimo 6 caracteres"
+								minLength={6}
+								required
+							/>
+						</div>
+						<div className="mb-3">
+							<label className="form-label">Confirmar Contraseña</label>
+							<input
+								type="password"
+								className="form-control"
+								value={confirmPassword}
+								onChange={e => setConfirmPassword(e.target.value)}
+								placeholder="Repite tu contraseña"
+								required
+							/>
+						</div>
+						<button type="submit" className="btn btn-primary w-100">
+							Registrarse
+						</button>
+					</form>
+					<p className="text-center mt-3 mb-0">
+						¿Ya tienes cuenta? <Link to="/login">Inicia Sesión</Link>
+					</p>
+				</div>
+			</div>
+		</div>
+	);
 };

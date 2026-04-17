@@ -11,7 +11,6 @@ CORS(api)
 
 # 1. RUTA DE PRUEBA (SOLO UNA)
 
-
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
     return jsonify({"message": "Conectado al Servidor Exitosamente"}), 200
