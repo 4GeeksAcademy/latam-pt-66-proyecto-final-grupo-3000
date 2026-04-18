@@ -28,7 +28,7 @@ export const Registro = () => {
     };
 
     return (
-        <div className="container mt-5 w-50">
+        <div className="container mt-5 w-50 main_registro">
             <h2 className="text-center mb-4">Registro de Usuario</h2>
             <form onSubmit={handleSubmit} className="border p-4 shadow-sm bg-light rounded">
                 <div className="mb-3">

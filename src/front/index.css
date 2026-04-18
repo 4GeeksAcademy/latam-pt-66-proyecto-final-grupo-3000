@@ -39,6 +39,10 @@
     height: 80vh;
 }
 
+.main_registro{
+    height: 80vh;
+}
+
 /*pequeños cambios de estilos al login*/
 .title_form{
     color: #1a73e8;
