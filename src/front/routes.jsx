@@ -10,6 +10,7 @@ import { Single } from "./pages/Single";
 import { Demo } from "./pages/Demo";
 import { Login } from "./pages/Login.jsx";
 import { Registro } from "./pages/Registro.jsx"; // <--- 1. IMPORTACIÓN AGREGADA
+import { Habit } from "./pages/Habit.jsx";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,6 +28,7 @@ export const router = createBrowserRouter(
 
       {/* 2. RUTA DE REGISTRO AGREGADA ABAJO */}
       <Route path="/registro" element={<Registro />} />
+      <Route path="/habitos" element={<Habit />} />
 
     </Route>
   )

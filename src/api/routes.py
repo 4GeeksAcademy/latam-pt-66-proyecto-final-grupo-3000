@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User
-from api.models import db, Habit 
+from api.models import db, User, Habit
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -63,20 +62,23 @@ def handle_signup():
         return jsonify(response_body), 200
 
 
-
 @api.route('/habits', methods=['POST'])
 def handle_create_habit():
     body = request.get_json()
-    
+
     new_habit = Habit(
         name=body['name'],
-        description=body.get('description', ""), 
+        description=body.get('description', ""),
         is_active=True
     )
     db.session.add(new_habit)
     db.session.commit()
-   
+
     return jsonify(new_habit.serialize()), 201
 
- 
 
+@api.route('/habits', methods=['GET'])
+def get_all_habits():
+    all_habits = Habit.query.all()
+    results = list(map(lambda x: x.serialize(), all_habits))
+    return jsonify(results), 200
