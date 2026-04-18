@@ -11,7 +11,7 @@ import { Demo } from "./pages/Demo";
 import { Login } from "./pages/Login.jsx";
 
 import { Registro } from "./pages/Registro.jsx";
-import { HabitsPage } from "./Habit.jsx"; // <--- 1. IMPORTACIÓN AGREGAD
+
 
 
 export const router = createBrowserRouter(
