@@ -53,7 +53,7 @@ export const Registro = () => {
                         required
                     />
                 </div>
-                <button type="submit" className="btn btn-success w-100">
+                <button type="submit" className="btn btn-primary login-btn w-100">
                     Crear mi cuenta
                 </button>
             </form>
