@@ -30,7 +30,7 @@ export const Login = () => {
             const data = await response.json();
             sessionStorage.setItem("token", data.token);
             sessionStorage.setItem("email", email);
-            navigate("/habits");
+            navigate("/habitos");
         } else {
             showError();
         }
