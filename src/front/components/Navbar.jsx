@@ -4,11 +4,11 @@ export const Navbar = () => {
 	const navigate = useNavigate();
 	useLocation(); // re-render on route changes to reflect auth state
 	const token = sessionStorage.getItem("token");
-	const email = sessionStorage.getItem("email");
+	const nombre = sessionStorage.getItem("nombre");
 
 	const handleLogout = () => {
 		sessionStorage.removeItem("token");
-		sessionStorage.removeItem("email");
+		sessionStorage.removeItem("nombre");
 		navigate("/");
 	};
 
@@ -22,8 +22,23 @@ export const Navbar = () => {
 					{token ? (
 						<>
 							<span className="navbar-text text-white me-1">
-								<i className="fa-solid fa-user me-1"></i>{email}
+								<i className="fa-solid fa-user me-1"></i>{nombre}
 							</span>
+							<Link to="/habitos">
+								<button className="btn btn-outline-light btn-sm">
+									<i className="fa-solid fa-list-check me-1"></i>Mis Hábitos
+								</button>
+							</Link>
+							<Link to="/historial">
+								<button className="btn btn-outline-light btn-sm">
+									<i className="fa-solid fa-calendar-check me-1"></i>Historial
+								</button>
+							</Link>
+							<Link to="/perfil">
+								<button className="btn btn-outline-light btn-sm">
+									<i className="fa-solid fa-gear me-1"></i>Mi Perfil
+								</button>
+							</Link>
 							<button className="btn btn-outline-light btn-sm" onClick={handleLogout}>
 								<i className="fa-solid fa-right-from-bracket me-1"></i>Cerrar Sesión
 							</button>

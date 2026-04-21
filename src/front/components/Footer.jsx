@@ -1,5 +1,5 @@
 export const Footer = () => (
-	<footer className="footer mt-auto py-3 bg-primary text-white text-center">
+	<footer className="py-3 bg-primary text-white text-center mt-5">
 		<div className="container">
 			<span className="me-3">
 				<i className="fa-solid fa-list-check me-1"></i>
