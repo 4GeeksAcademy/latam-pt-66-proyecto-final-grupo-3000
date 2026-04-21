@@ -1,6 +1,7 @@
 export const initialStore=()=>{
   return{
     message: null,
+    token: null,
     todos: [
       {
         id: 1,

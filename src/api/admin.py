@@ -3,6 +3,7 @@ import inspect
 from flask_admin import Admin
 from . import models
 from .models import db
+from api.models import db, User, Habit
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.theme import Bootstrap4Theme
 
@@ -16,3 +17,5 @@ def setup_admin(app):
         # Verify that the object is a SQLAlchemy model before adding it to the admin. 
         if inspect.isclass(obj) and issubclass(obj, db.Model):
             admin.add_view(ModelView(obj, db.session))
+
+

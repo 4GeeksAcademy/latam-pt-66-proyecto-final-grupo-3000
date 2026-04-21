@@ -5,6 +5,7 @@ import datetime
 
 db = SQLAlchemy()
 
+
 class User(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     nombre: Mapped[str] = mapped_column(String(80), nullable=True)
@@ -20,7 +21,6 @@ class User(db.Model):
             "nombre": self.nombre,
             "apellido": self.apellido,
             "email": self.email,
-            # do not serialize the password, its a security breach
         }
 
 class Categoria(db.Model):

@@ -1,17 +1,18 @@
-"""
-This module takes care of starting the API Server, Loading the DB and Adding the endpoints
-"""
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Habito, HabitoRegistro, Categoria
 import datetime
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
 CORS(api)
+
+@api.route('/hello', methods=['POST', 'GET'])
+def handle_hello():
+    return jsonify({"message": "Conectado al Servidor Exitosamente"}), 200
 
 @api.route('/login', methods=['POST'])
 def handle_login():
@@ -21,7 +22,7 @@ def handle_login():
     user = User.query.filter_by(email=email, password=password).first()
 
     if user is None:
-        return jsonify({"msg":"Email o contraseña incorrectas"}), 401
+        return jsonify({"msg": "Email o contraseña incorrectas"}), 401
 
     access_token = create_access_token(identity=str(user.id))
     return jsonify({"token": access_token, "user_id": user.id, "nombre": user.nombre}), 200
@@ -36,9 +37,9 @@ def handle_registro():
     if not nombre or not apellido or not email or not password:
         return jsonify({"msg": "Todos los campos son requeridos"}), 400
 
-    existing_user = User.query.filter_by(email=email).first()
-    if existing_user:
-        return jsonify({"msg": "El email ya está registrado"}), 409
+    user_exists = User.query.filter_by(email=email).first()
+    if user_exists:
+        return jsonify({"msg": "El usuario ya existe"}), 400
 
     new_user = User(nombre=nombre, apellido=apellido, email=email, password=password, is_active=True)
     db.session.add(new_user)
@@ -167,12 +168,3 @@ def editar_perfil():
         user.password = nueva_password
     db.session.commit()
     return jsonify(user.serialize()), 200
-
-@api.route('/hello', methods=['GET'])
-def handle_hello():
-
-    response_body = {
-        "message": "Backend conectado"
-    }
-
-    return jsonify(response_body), 200
