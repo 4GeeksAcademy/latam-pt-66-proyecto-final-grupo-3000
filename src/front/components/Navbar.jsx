@@ -34,6 +34,11 @@ export const Navbar = () => {
 									<i className="fa-solid fa-calendar-check me-1"></i>Historial
 								</button>
 							</Link>
+							<Link to="/exportar">
+								<button className="btn btn-outline-light btn-sm">
+									<i className="fa-solid fa-file-export me-1"></i>Exportar
+								</button>
+							</Link>
 							<Link to="/perfil">
 								<button className="btn btn-outline-light btn-sm">
 									<i className="fa-solid fa-gear me-1"></i>Mi Perfil

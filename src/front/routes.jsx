@@ -13,6 +13,7 @@ import { Registro } from "./pages/Registro.jsx";
 import { Habitos } from "./pages/Habitos.jsx";
 import { Perfil } from "./pages/Perfil.jsx";
 import { Historial } from "./pages/Historial.jsx";
+import { Exportar } from "./pages/exportar.jsx";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -25,6 +26,7 @@ export const router = createBrowserRouter(
         <Route path="/habitos" element={<Habitos />} />
         <Route path="/perfil" element={<Perfil />} />
         <Route path="/historial" element={<Historial />} />
+        <Route path="/exportar" element={<Exportar />} />
       </Route>
     )
 );

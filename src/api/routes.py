@@ -153,6 +153,18 @@ def editar_habito(habito_id):
     db.session.commit()
     return jsonify(habito.serialize()), 200
 
+@api.route('/habitos/<int:habito_id>', methods=['DELETE'])
+@jwt_required()
+def eliminar_habito(habito_id):
+    user_id = get_jwt_identity()
+    habito = Habito.query.filter_by(id=habito_id, user_id=user_id).first()
+    if not habito:
+        return jsonify({"msg": "Hábito no encontrado"}), 404
+
+    habito.is_active = False
+    db.session.commit()
+    return jsonify({"msg": "Hábito eliminado"}), 200
+
 @api.route('/habitos/<int:habito_id>/registro', methods=['POST'])
 @jwt_required()
 def marcar_habito(habito_id):

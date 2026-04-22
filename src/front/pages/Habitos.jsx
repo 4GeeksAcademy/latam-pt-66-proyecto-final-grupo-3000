@@ -40,6 +40,10 @@ export const Habitos = () => {
 	const [nuevaCat, setNuevaCat] = useState("");
 	const [nuevaCatColor, setNuevaCatColor] = useState("primary");
 	const [errorCat, setErrorCat] = useState("");
+	const [editandoCatId, setEditandoCatId] = useState(null);
+	const [editCatNombre, setEditCatNombre] = useState("");
+	const [editCatColor, setEditCatColor] = useState("primary");
+	const [errorEditarCat, setErrorEditarCat] = useState("");
 
 	useEffect(() => {
 		if (!token) { navigate("/login"); return; }
@@ -110,6 +114,25 @@ export const Habitos = () => {
 		}
 	};
 
+	const eliminarHabito = async (id, nombre) => {
+		const confirmado = window.confirm(`¿Seguro que deseas eliminar el hábito "${nombre}"?`);
+		if (!confirmado) return;
+
+		const resp = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/habitos/${id}`, {
+			method: "DELETE",
+			headers,
+		});
+
+		if (resp.ok) {
+			setHabitos(prev => prev.filter(h => h.id !== id));
+			setRegistros(prev => {
+				const copia = { ...prev };
+				delete copia[id];
+				return copia;
+			});
+		}
+	};
+
 	const marcarFecha = async (habitoId) => {
 		const hoy = new Date().toISOString().split("T")[0];
 		const fecha = fechaSeleccionada[habitoId] || hoy;
@@ -136,6 +159,47 @@ export const Habitos = () => {
 			setNuevaCat(""); setNuevaCatColor("primary");
 		} else {
 			setErrorCat("Error al crear la categoría.");
+		}
+	};
+
+	const iniciarEdicionCategoria = (cat) => {
+		setEditandoCatId(cat.id);
+		setEditCatNombre(cat.nombre);
+		setEditCatColor(cat.color || "primary");
+		setErrorEditarCat("");
+	};
+
+	const cerrarModalEdicionCategoria = () => {
+		setEditandoCatId(null);
+		setEditCatNombre("");
+		setEditCatColor("primary");
+		setErrorEditarCat("");
+	};
+
+	const guardarEdicionCategoria = async (catId) => {
+		setErrorEditarCat("");
+		if (!editCatNombre.trim()) {
+			setErrorEditarCat("El nombre es requerido.");
+			return;
+		}
+
+		const resp = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/categorias/${catId}`, {
+			method: "PUT",
+			headers: { ...headers, "Content-Type": "application/json" },
+			body: JSON.stringify({ nombre: editCatNombre, color: editCatColor }),
+		});
+
+		if (resp.ok) {
+			const actualizada = await resp.json();
+			setCategorias(prev => prev.map(c => c.id === catId ? actualizada : c));
+			setHabitos(prev => prev.map(h =>
+				h.categoria_id === catId
+					? { ...h, categoria_nombre: actualizada.nombre, categoria_color: actualizada.color }
+					: h
+			));
+			cerrarModalEdicionCategoria();
+		} else {
+			setErrorEditarCat("No se pudo actualizar la categoría.");
 		}
 	};
 
@@ -230,6 +294,11 @@ export const Habitos = () => {
 										setEditCategoriaId(h.categoria_id || "");
 									}}>
 										<i className="fa-solid fa-pen"></i>
+									</button>
+									<button
+										className="btn btn-sm btn-outline-danger ms-1"
+										onClick={() => eliminarHabito(h.id, h.nombre)}>
+										<i className="fa-solid fa-trash"></i>
 									</button>
 								</div>
 
@@ -397,12 +466,24 @@ export const Habitos = () => {
 								</button>
 							</form>
 							{categorias.length > 0 && (
-								<div className="mt-3 d-flex flex-wrap gap-2">
-									{categorias.map(c => (
-										<span key={c.id} className={`badge bg-${c.color} px-3 py-2`} style={{ borderRadius: "12px", fontSize: "0.85rem" }}>
-											{c.nombre}
-										</span>
-									))}
+								<div className="mt-3">
+									<div className="small text-muted mb-2">Categorías registradas</div>
+									{errorEditarCat && <div className="alert alert-danger py-2 mb-2">{errorEditarCat}</div>}
+									<div className="d-flex flex-row gap-2">
+										{categorias.map(c => (
+											<div key={c.id} className="d-flex align-items-center gap-2 flex-wrap">
+												<span className={`badge bg-${c.color} px-3 py-2`} style={{ borderRadius: "12px", fontSize: "0.85rem" }}>
+													{c.nombre}
+												</span>
+												<button
+													className="btn btn-sm btn-outline-primary p-1"
+													title="Editar categoría"
+													onClick={() => iniciarEdicionCategoria(c)}>
+													<i className="fa-solid fa-pen"></i>
+												</button>
+											</div>
+										))}
+									</div>
 								</div>
 							)}
 						</div>
@@ -443,6 +524,53 @@ export const Habitos = () => {
 							habitos.filter(h => h.nombre.toLowerCase().includes(busqueda.toLowerCase()))
 						)
 					)}
+				</>
+			)}
+
+			{editandoCatId !== null && (
+				<>
+					<div className="modal fade show d-block" tabIndex="-1" role="dialog" aria-modal="true">
+						<div className="modal-dialog modal-dialog-centered" role="document">
+							<div className="modal-content">
+								<div className="modal-header">
+									<h5 className="modal-title">Editar categoría</h5>
+									<button type="button" className="btn-close" aria-label="Close" onClick={cerrarModalEdicionCategoria}></button>
+								</div>
+								<div className="modal-body">
+									{errorEditarCat && <div className="alert alert-danger py-2">{errorEditarCat}</div>}
+									<div className="mb-3">
+										<label className="form-label">Nombre</label>
+										<input
+											type="text"
+											className="form-control"
+											value={editCatNombre}
+											onChange={e => setEditCatNombre(e.target.value)}
+										/>
+									</div>
+									<div>
+										<label className="form-label">Color</label>
+										<select
+											className="form-select"
+											value={editCatColor}
+											onChange={e => setEditCatColor(e.target.value)}>
+											{COLORES.map(color => (
+												<option key={color.valor} value={color.valor}>{color.etiqueta}</option>
+											))}
+										</select>
+									</div>
+								</div>
+								<div className="modal-footer">
+									<button type="button" className="btn btn-outline-secondary" onClick={cerrarModalEdicionCategoria}>
+										Cancelar
+									</button>
+									<button type="button" className="btn btn-primary" onClick={() => guardarEdicionCategoria(editandoCatId)}>
+										Guardar cambios
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className="modal-backdrop fade show"></div>
 				</>
 			)}
 		</div>

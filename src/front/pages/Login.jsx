@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 const backendUrl = import.meta.env.VITE_BACKEND_URL + "/api/login";
 
@@ -9,6 +9,17 @@ export const Login = () => {
     const [error, setError] = useState(false);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const savedToken = localStorage.getItem("token");
+        if (savedToken && !sessionStorage.getItem("token")) {
+            sessionStorage.setItem("token", savedToken);
+            sessionStorage.setItem("nombre", localStorage.getItem("nombre") || "");
+            sessionStorage.setItem("email", localStorage.getItem("email") || "");
+            navigate("/habitos");
+        }
+        setRememberMe(!!savedToken);
+    }, [navigate]);
+
     const showError = () => {
         setError(true);
         setTimeout(() => setError(false), 3000);
@@ -18,6 +29,7 @@ export const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         setError(false);
+        const rememberChecked = Boolean(e.currentTarget.elements.remember?.checked);
 
         const response = await fetch(backendUrl, {
             method: "POST",
@@ -27,17 +39,20 @@ export const Login = () => {
 
         if (response.ok) {
             const data = await response.json();
+            if (!data?.token) {
+                showError();
+                return;
+            }
+
             sessionStorage.setItem("token", data.token);
             sessionStorage.setItem("email", email);
             sessionStorage.setItem("nombre", data.nombre || "");
 
-            // Si "Recuérdame" está marcado, guardar token en localStorage
-            if (rememberMe) {
+            if (rememberChecked) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("nombre", data.nombre || "");
                 localStorage.setItem("email", email);
             } else {
-                // Si no está marcado, limpiar localStorage
                 localStorage.removeItem("token");
                 localStorage.removeItem("nombre");
                 localStorage.removeItem("email");
@@ -48,8 +63,6 @@ export const Login = () => {
         }
     };
 
-    //Función que actualiza el estado del checkbox "Recuérdame"
-    // El token se guardará en localStorage después de un login exitoso si esta opción está marcada
     const handleRememberMe = (e) => {
         setRememberMe(e.target.checked);
     };
@@ -107,7 +120,7 @@ export const Login = () => {
 
                                 <div className="d-flex justify-content-between mb-4 small">
                                     <div className="form-check">
-                                        <input className="form-check-input" type="checkbox" id="remember" checked={rememberMe} onChange={handleRememberMe} />
+                                        <input className="form-check-input" type="checkbox" id="remember" name="remember" checked={rememberMe} onChange={handleRememberMe} />
                                         <label className="form-check-label text-muted" htmlFor="remember">Recuérdame</label>
                                     </div>
                                 </div>
