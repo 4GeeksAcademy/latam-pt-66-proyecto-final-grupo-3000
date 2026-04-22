@@ -37,7 +37,7 @@ class Categoria(db.Model):
             "color": self.color,
         }
 
-class Habito(db.Model):
+class Habitos(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     nombre: Mapped[str] = mapped_column(String(120), nullable=False)
     descripcion: Mapped[str] = mapped_column(String(300), nullable=True)
