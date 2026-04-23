@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { buildAchievementStats, evaluateAchievements, saveUnlockedAchievements } from "../utils/achievements";
 
 const COLORES = [
 	{ valor: "primary", etiqueta: "Azul" },
@@ -44,6 +45,7 @@ export const Habitos = () => {
 	const [editCatNombre, setEditCatNombre] = useState("");
 	const [editCatColor, setEditCatColor] = useState("primary");
 	const [errorEditarCat, setErrorEditarCat] = useState("");
+	const [nuevosLogros, setNuevosLogros] = useState([]);
 
 	useEffect(() => {
 		if (!token) { navigate("/login"); return; }
@@ -57,6 +59,12 @@ export const Habitos = () => {
 			if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
 		}, 400);
 	}, [idDestacado, habitos]);
+
+	useEffect(() => {
+		if (nuevosLogros.length === 0) return;
+		const timer = setTimeout(() => setNuevosLogros([]), 5000);
+		return () => clearTimeout(timer);
+	}, [nuevosLogros]);
 
 	const headers = { Authorization: `Bearer ${token}` };
 
@@ -78,6 +86,19 @@ export const Habitos = () => {
 		if (resp.ok) {
 			const data = await resp.json();
 			setRegistros(prev => ({ ...prev, [habitoId]: data }));
+			return data;
+		}
+		return [];
+	};
+
+	const procesarNuevosLogros = (registrosActualizados) => {
+		const identity = sessionStorage.getItem("email") || localStorage.getItem("email") || nombreUsuario || "usuario";
+		const stats = buildAchievementStats(habitos, registrosActualizados);
+		const achievements = evaluateAchievements(stats);
+		const { newUnlocks } = saveUnlockedAchievements(identity, achievements);
+
+		if (newUnlocks.length > 0) {
+			setNuevosLogros(newUnlocks);
 		}
 	};
 
@@ -136,12 +157,19 @@ export const Habitos = () => {
 	const marcarFecha = async (habitoId) => {
 		const hoy = new Date().toISOString().split("T")[0];
 		const fecha = fechaSeleccionada[habitoId] || hoy;
-		await fetch(import.meta.env.VITE_BACKEND_URL + `/api/habitos/${habitoId}/registro`, {
+		const resp = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/habitos/${habitoId}/registro`, {
 			method: "POST",
 			headers: { ...headers, "Content-Type": "application/json" },
 			body: JSON.stringify({ fecha }),
 		});
-		cargarRegistros(habitoId);
+
+		if (!resp.ok) return;
+
+		const resultado = await resp.json();
+		const registrosHabito = await cargarRegistros(habitoId);
+		if (resultado.completado === false) return;
+
+		procesarNuevosLogros({ ...registros, [habitoId]: registrosHabito });
 	};
 
 	const crearCategoria = async (e) => {
@@ -377,7 +405,36 @@ export const Habitos = () => {
 	};
 
 	return (
-		<div className="container mt-4 pb-4">
+		<div className="container mt-4 pb-4 position-relative">
+			{nuevosLogros.length > 0 && (
+				<div className="position-fixed top-0 end-0 p-3" style={{ zIndex: 1080 }}>
+					<div
+						className="toast show border-0 shadow"
+						role="alert"
+						aria-live="assertive"
+						aria-atomic="true"
+						style={{ borderRadius: "16px", minWidth: "320px", background: "linear-gradient(135deg, #fff7e6 0%, #eafaf1 100%)" }}>
+						<div className="toast-header border-0" style={{ background: "transparent" }}>
+							<i className="fa-solid fa-trophy text-warning me-2"></i>
+							<strong className="me-auto">¡Medalla desbloqueada!</strong>
+							<small className="text-muted">Ahora</small>
+							<button type="button" className="btn-close ms-2" aria-label="Close" onClick={() => setNuevosLogros([])}></button>
+						</div>
+						<div className="toast-body pt-0">
+							<div className="small mb-2">{nuevosLogros.map(logro => logro.titulo).join(", ")}</div>
+							<div className="d-flex gap-2">
+								<button className="btn btn-sm btn-outline-success" onClick={() => navigate("/reconocimientos")}>
+									Ver insignias
+								</button>
+								<button className="btn btn-sm btn-success" onClick={() => setNuevosLogros([])}>
+									Cerrar
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			)}
+
 			{/* Header */}
 			<div className="d-flex justify-content-between align-items-center mb-1">
 				<div className="d-flex align-items-center gap-3">

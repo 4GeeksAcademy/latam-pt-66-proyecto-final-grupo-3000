@@ -1,24 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 const backendUrl = import.meta.env.VITE_BACKEND_URL + "/api/login";
 
 export const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [mostrarPassword, setMostrarPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState(false);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const savedToken = localStorage.getItem("token");
-        if (savedToken && !sessionStorage.getItem("token")) {
-            sessionStorage.setItem("token", savedToken);
-            sessionStorage.setItem("nombre", localStorage.getItem("nombre") || "");
-            sessionStorage.setItem("email", localStorage.getItem("email") || "");
-            navigate("/habitos");
-        }
-        setRememberMe(!!savedToken);
-    }, [navigate]);
 
     const showError = () => {
         setError(true);
@@ -29,7 +19,6 @@ export const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         setError(false);
-        const rememberChecked = Boolean(e.currentTarget.elements.remember?.checked);
 
         const response = await fetch(backendUrl, {
             method: "POST",
@@ -39,20 +28,17 @@ export const Login = () => {
 
         if (response.ok) {
             const data = await response.json();
-            if (!data?.token) {
-                showError();
-                return;
-            }
-
             sessionStorage.setItem("token", data.token);
             sessionStorage.setItem("email", email);
             sessionStorage.setItem("nombre", data.nombre || "");
 
-            if (rememberChecked) {
+            // Si "Recuérdame" está marcado, guardar token en localStorage
+            if (rememberMe) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("nombre", data.nombre || "");
                 localStorage.setItem("email", email);
             } else {
+                // Si no está marcado, limpiar localStorage
                 localStorage.removeItem("token");
                 localStorage.removeItem("nombre");
                 localStorage.removeItem("email");
@@ -63,6 +49,8 @@ export const Login = () => {
         }
     };
 
+    //Función que actualiza el estado del checkbox "Recuérdame"
+    // El token se guardará en localStorage después de un login exitoso si esta opción está marcada
     const handleRememberMe = (e) => {
         setRememberMe(e.target.checked);
     };
@@ -111,16 +99,24 @@ export const Login = () => {
                                     <i className="fa-solid fa-lock position-absolute top-50 start-0 translate-middle-y text-muted"></i>
                                     <input
                                         className="form-control input-underlined"
-                                        type="password"
+                                        type={mostrarPassword ? "text" : "password"}
                                         placeholder="Contraseña"
                                         required
                                         onChange={e => setPassword(e.target.value)}
                                     />
+                                    <button
+                                        type="button"
+                                        className="btn btn-link position-absolute top-50 end-0 translate-middle-y text-muted p-0"
+                                        style={{ textDecoration: "none" }}
+                                        onClick={() => setMostrarPassword(prev => !prev)}
+                                        aria-label={mostrarPassword ? "Ocultar contraseña" : "Mostrar contraseña"}>
+                                        <i className={`fa-solid ${mostrarPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                                    </button>
                                 </div>
 
                                 <div className="d-flex justify-content-between mb-4 small">
                                     <div className="form-check">
-                                        <input className="form-check-input" type="checkbox" id="remember" name="remember" checked={rememberMe} onChange={handleRememberMe} />
+                                        <input className="form-check-input" type="checkbox" id="remember" checked={rememberMe} onChange={handleRememberMe} />
                                         <label className="form-check-label text-muted" htmlFor="remember">Recuérdame</label>
                                     </div>
                                 </div>
@@ -145,4 +141,3 @@ export const Login = () => {
         </>
     );
 };
-

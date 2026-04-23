@@ -39,6 +39,11 @@ export const Navbar = () => {
 									<i className="fa-solid fa-file-export me-1"></i>Exportar
 								</button>
 							</Link>
+							<Link to="/reconocimientos">
+								<button className="btn btn-outline-light btn-sm">
+									<i className="fa-solid fa-trophy me-1"></i>Logros
+								</button>
+							</Link>
 							<Link to="/perfil">
 								<button className="btn btn-outline-light btn-sm">
 									<i className="fa-solid fa-gear me-1"></i>Mi Perfil
