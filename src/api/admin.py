@@ -3,7 +3,7 @@ import inspect
 from flask_admin import Admin
 from . import models
 from .models import db
-from api.models import db, User, Habit
+from api.models import db, User, Habito
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.theme import Bootstrap4Theme
 

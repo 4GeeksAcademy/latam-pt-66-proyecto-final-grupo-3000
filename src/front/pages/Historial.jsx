@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 export const Historial = () => {
 	const navigate = useNavigate();
-	const token = sessionStorage.getItem("token");
+	const token = sessionStorage.getItem("token") || localStorage.getItem("token");
 
 	const [habitos, setHabitos] = useState([]);
 	const [registros, setRegistros] = useState({});

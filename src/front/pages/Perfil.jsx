@@ -4,7 +4,7 @@ import { HabitoTile } from "../components/HabitoTile";
 
 export const Perfil = () => {
 	const navigate = useNavigate();
-	const token = sessionStorage.getItem("token");
+	const token = sessionStorage.getItem("token") || localStorage.getItem("token");
 
 	const [nombre, setNombre] = useState("");
 	const [apellido, setApellido] = useState("");

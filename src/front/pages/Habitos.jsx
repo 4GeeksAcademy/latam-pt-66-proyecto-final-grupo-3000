@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { buildAchievementStats, evaluateAchievements, saveUnlockedAchievements } from "../utils/achievements";
 
 const COLORES = [
 	{ valor: "primary", etiqueta: "Azul" },
@@ -40,6 +41,11 @@ export const Habitos = () => {
 	const [nuevaCat, setNuevaCat] = useState("");
 	const [nuevaCatColor, setNuevaCatColor] = useState("primary");
 	const [errorCat, setErrorCat] = useState("");
+	const [editandoCatId, setEditandoCatId] = useState(null);
+	const [editCatNombre, setEditCatNombre] = useState("");
+	const [editCatColor, setEditCatColor] = useState("primary");
+	const [errorEditarCat, setErrorEditarCat] = useState("");
+	const [nuevosLogros, setNuevosLogros] = useState([]);
 
 	useEffect(() => {
 		if (!token) { navigate("/login"); return; }
@@ -53,6 +59,12 @@ export const Habitos = () => {
 			if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
 		}, 400);
 	}, [idDestacado, habitos]);
+
+	useEffect(() => {
+		if (nuevosLogros.length === 0) return;
+		const timer = setTimeout(() => setNuevosLogros([]), 5000);
+		return () => clearTimeout(timer);
+	}, [nuevosLogros]);
 
 	const headers = { Authorization: `Bearer ${token}` };
 
@@ -74,6 +86,19 @@ export const Habitos = () => {
 		if (resp.ok) {
 			const data = await resp.json();
 			setRegistros(prev => ({ ...prev, [habitoId]: data }));
+			return data;
+		}
+		return [];
+	};
+
+	const procesarNuevosLogros = (registrosActualizados) => {
+		const identity = sessionStorage.getItem("email") || localStorage.getItem("email") || nombreUsuario || "usuario";
+		const stats = buildAchievementStats(habitos, registrosActualizados);
+		const achievements = evaluateAchievements(stats);
+		const { newUnlocks } = saveUnlockedAchievements(identity, achievements);
+
+		if (newUnlocks.length > 0) {
+			setNuevosLogros(newUnlocks);
 		}
 	};
 
@@ -110,15 +135,41 @@ export const Habitos = () => {
 		}
 	};
 
+	const eliminarHabito = async (id, nombre) => {
+		const confirmado = window.confirm(`¿Seguro que deseas eliminar el hábito "${nombre}"?`);
+		if (!confirmado) return;
+
+		const resp = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/habitos/${id}`, {
+			method: "DELETE",
+			headers,
+		});
+
+		if (resp.ok) {
+			setHabitos(prev => prev.filter(h => h.id !== id));
+			setRegistros(prev => {
+				const copia = { ...prev };
+				delete copia[id];
+				return copia;
+			});
+		}
+	};
+
 	const marcarFecha = async (habitoId) => {
 		const hoy = new Date().toISOString().split("T")[0];
 		const fecha = fechaSeleccionada[habitoId] || hoy;
-		await fetch(import.meta.env.VITE_BACKEND_URL + `/api/habitos/${habitoId}/registro`, {
+		const resp = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/habitos/${habitoId}/registro`, {
 			method: "POST",
 			headers: { ...headers, "Content-Type": "application/json" },
 			body: JSON.stringify({ fecha }),
 		});
-		cargarRegistros(habitoId);
+
+		if (!resp.ok) return;
+
+		const resultado = await resp.json();
+		const registrosHabito = await cargarRegistros(habitoId);
+		if (resultado.completado === false) return;
+
+		procesarNuevosLogros({ ...registros, [habitoId]: registrosHabito });
 	};
 
 	const crearCategoria = async (e) => {
@@ -136,6 +187,47 @@ export const Habitos = () => {
 			setNuevaCat(""); setNuevaCatColor("primary");
 		} else {
 			setErrorCat("Error al crear la categoría.");
+		}
+	};
+
+	const iniciarEdicionCategoria = (cat) => {
+		setEditandoCatId(cat.id);
+		setEditCatNombre(cat.nombre);
+		setEditCatColor(cat.color || "primary");
+		setErrorEditarCat("");
+	};
+
+	const cerrarModalEdicionCategoria = () => {
+		setEditandoCatId(null);
+		setEditCatNombre("");
+		setEditCatColor("primary");
+		setErrorEditarCat("");
+	};
+
+	const guardarEdicionCategoria = async (catId) => {
+		setErrorEditarCat("");
+		if (!editCatNombre.trim()) {
+			setErrorEditarCat("El nombre es requerido.");
+			return;
+		}
+
+		const resp = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/categorias/${catId}`, {
+			method: "PUT",
+			headers: { ...headers, "Content-Type": "application/json" },
+			body: JSON.stringify({ nombre: editCatNombre, color: editCatColor }),
+		});
+
+		if (resp.ok) {
+			const actualizada = await resp.json();
+			setCategorias(prev => prev.map(c => c.id === catId ? actualizada : c));
+			setHabitos(prev => prev.map(h =>
+				h.categoria_id === catId
+					? { ...h, categoria_nombre: actualizada.nombre, categoria_color: actualizada.color }
+					: h
+			));
+			cerrarModalEdicionCategoria();
+		} else {
+			setErrorEditarCat("No se pudo actualizar la categoría.");
 		}
 	};
 
@@ -231,6 +323,11 @@ export const Habitos = () => {
 									}}>
 										<i className="fa-solid fa-pen"></i>
 									</button>
+									<button
+										className="btn btn-sm btn-outline-danger ms-1"
+										onClick={() => eliminarHabito(h.id, h.nombre)}>
+										<i className="fa-solid fa-trash"></i>
+									</button>
 								</div>
 
 								<div className="d-flex align-items-center gap-2 flex-wrap">
@@ -308,7 +405,36 @@ export const Habitos = () => {
 	};
 
 	return (
-		<div className="container mt-4 pb-4">
+		<div className="container mt-4 pb-4 position-relative">
+			{nuevosLogros.length > 0 && (
+				<div className="position-fixed top-0 end-0 p-3" style={{ zIndex: 1080 }}>
+					<div
+						className="toast show border-0 shadow"
+						role="alert"
+						aria-live="assertive"
+						aria-atomic="true"
+						style={{ borderRadius: "16px", minWidth: "320px", background: "linear-gradient(135deg, #fff7e6 0%, #eafaf1 100%)" }}>
+						<div className="toast-header border-0" style={{ background: "transparent" }}>
+							<i className="fa-solid fa-trophy text-warning me-2"></i>
+							<strong className="me-auto">¡Medalla desbloqueada!</strong>
+							<small className="text-muted">Ahora</small>
+							<button type="button" className="btn-close ms-2" aria-label="Close" onClick={() => setNuevosLogros([])}></button>
+						</div>
+						<div className="toast-body pt-0">
+							<div className="small mb-2">{nuevosLogros.map(logro => logro.titulo).join(", ")}</div>
+							<div className="d-flex gap-2">
+								<button className="btn btn-sm btn-outline-success" onClick={() => navigate("/reconocimientos")}>
+									Ver insignias
+								</button>
+								<button className="btn btn-sm btn-success" onClick={() => setNuevosLogros([])}>
+									Cerrar
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			)}
+
 			{/* Header */}
 			<div className="d-flex justify-content-between align-items-center mb-1">
 				<div className="d-flex align-items-center gap-3">
@@ -397,12 +523,24 @@ export const Habitos = () => {
 								</button>
 							</form>
 							{categorias.length > 0 && (
-								<div className="mt-3 d-flex flex-wrap gap-2">
-									{categorias.map(c => (
-										<span key={c.id} className={`badge bg-${c.color} px-3 py-2`} style={{ borderRadius: "12px", fontSize: "0.85rem" }}>
-											{c.nombre}
-										</span>
-									))}
+								<div className="mt-3">
+									<div className="small text-muted mb-2">Categorías registradas</div>
+									{errorEditarCat && <div className="alert alert-danger py-2 mb-2">{errorEditarCat}</div>}
+									<div className="d-flex flex-row gap-2">
+										{categorias.map(c => (
+											<div key={c.id} className="d-flex align-items-center gap-2 flex-wrap">
+												<span className={`badge bg-${c.color} px-3 py-2`} style={{ borderRadius: "12px", fontSize: "0.85rem" }}>
+													{c.nombre}
+												</span>
+												<button
+													className="btn btn-sm btn-outline-primary p-1"
+													title="Editar categoría"
+													onClick={() => iniciarEdicionCategoria(c)}>
+													<i className="fa-solid fa-pen"></i>
+												</button>
+											</div>
+										))}
+									</div>
 								</div>
 							)}
 						</div>
@@ -443,6 +581,53 @@ export const Habitos = () => {
 							habitos.filter(h => h.nombre.toLowerCase().includes(busqueda.toLowerCase()))
 						)
 					)}
+				</>
+			)}
+
+			{editandoCatId !== null && (
+				<>
+					<div className="modal fade show d-block" tabIndex="-1" role="dialog" aria-modal="true">
+						<div className="modal-dialog modal-dialog-centered" role="document">
+							<div className="modal-content">
+								<div className="modal-header">
+									<h5 className="modal-title">Editar categoría</h5>
+									<button type="button" className="btn-close" aria-label="Close" onClick={cerrarModalEdicionCategoria}></button>
+								</div>
+								<div className="modal-body">
+									{errorEditarCat && <div className="alert alert-danger py-2">{errorEditarCat}</div>}
+									<div className="mb-3">
+										<label className="form-label">Nombre</label>
+										<input
+											type="text"
+											className="form-control"
+											value={editCatNombre}
+											onChange={e => setEditCatNombre(e.target.value)}
+										/>
+									</div>
+									<div>
+										<label className="form-label">Color</label>
+										<select
+											className="form-select"
+											value={editCatColor}
+											onChange={e => setEditCatColor(e.target.value)}>
+											{COLORES.map(color => (
+												<option key={color.valor} value={color.valor}>{color.etiqueta}</option>
+											))}
+										</select>
+									</div>
+								</div>
+								<div className="modal-footer">
+									<button type="button" className="btn btn-outline-secondary" onClick={cerrarModalEdicionCategoria}>
+										Cancelar
+									</button>
+									<button type="button" className="btn btn-primary" onClick={() => guardarEdicionCategoria(editandoCatId)}>
+										Guardar cambios
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className="modal-backdrop fade show"></div>
 				</>
 			)}
 		</div>

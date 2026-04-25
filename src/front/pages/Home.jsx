@@ -4,8 +4,8 @@ import { HabitoTile } from "../components/HabitoTile";
 
 export const Home = () => {
 	const navigate = useNavigate();
-	const token = sessionStorage.getItem("token");
-	const nombreUsuario = sessionStorage.getItem("nombre");
+	const token = sessionStorage.getItem("token") || localStorage.getItem("token");
+	const nombreUsuario = sessionStorage.getItem("nombre") || localStorage.getItem("nombre");
 
 	const [habitos, setHabitos] = useState([]);
 	const [categorias, setCategorias] = useState([]);
