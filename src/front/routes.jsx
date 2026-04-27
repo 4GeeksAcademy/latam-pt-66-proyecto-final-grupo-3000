@@ -16,6 +16,7 @@ import { Historial } from "./pages/Historial.jsx";
 import { Exportar } from "./pages/exportar.jsx";
 import { Reconocimientos } from "./pages/Reconocimientos.jsx";
 import { Acercade } from "./components/Acercade.jsx";
+import { Ayuda } from "./components/Ayuda.jsx";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,6 +32,7 @@ export const router = createBrowserRouter(
       <Route path="/exportar" element={<Exportar />} />
       <Route path="/reconocimientos" element={<Reconocimientos />} />
       <Route path="/acercade" element={<Acercade />} />
+      <Route path="/ayuda" element={<Ayuda />} />
     </Route>
   )
 );

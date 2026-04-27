@@ -21,7 +21,7 @@ export const Acercade = () => {
             <ul className="list-group shadow-sm">
                 <li className="list-group-item"><strong>Versión de la App:</strong> 1.0.0</li>
                 <li className="list-group-item"><strong>React:</strong> v18.2.0</li>
-                <li className="list-group-item"><strong>Vite:</strong> v5.x</li>
+                <li className="list-group-item"><strong>Vite:</strong> v4.5.9</li>
                 <li className="list-group-item"><strong>jsPDF:</strong> v2.5.1</li>
                 <li className="list-group-item"><strong>React Router:</strong> v6.18.0</li>
             </ul>

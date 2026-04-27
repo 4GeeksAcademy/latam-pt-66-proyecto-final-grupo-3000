@@ -8,10 +8,15 @@ export const Footer = () => (
 				<strong>Habit Tracker</strong> &copy; {new Date().getFullYear()}
 			</span>
 			<span>Construye mejores hábitos, un día a la vez.</span>
-			<div className="mt-3">
-				<Link to="/acercade" className="btn btn-outline-light btn-sm rounded-pill px-3">
+			<div className="mt-4 d-flex justify-content-center gap-3">
+				<Link to="/acercade" className="btn btn-outline-light btn-sm rounded-pill px-0" style={{ width: "100px" }}>
 					Acerca de
 				</Link>
+
+				<Link to="/ayuda" className="btn btn-outline-light btn-sm rounded-pill px-0" style={{ width: "100px" }}>
+					Ayuda
+				</Link>
+
 
 			</div>
 		</div>
