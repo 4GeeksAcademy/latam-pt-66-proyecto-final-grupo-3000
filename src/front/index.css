@@ -1,3 +1,5 @@
+/* --- ESTILOS ORIGINALES DEL EQUIPO --- */
+
 /* Estilos extra al Login */
 .bg-gradient-blue {
     background: linear-gradient(180deg, #1aa3e8 0%, #02358c 100%);
@@ -31,24 +33,22 @@
     font-weight: bold;
     box-shadow: 0 4px 15px rgba(26, 115, 232, 0.3);
 }
-/*Acá pueden colocar el tamaño de alto de cada componente para adaptarla a la pantalla y que el footer quede en la parte inferior*/
-.main_Home{
-    height: 80vh;
-}
-.main_Login{
+
+/* Tamaños de alto para adaptar a la pantalla */
+.main_Home, .main_Login, .main_registro, .main_Habits {
     height: 80vh;
 }
 
-/*pequeños cambios de estilos al login*/
-.title_form{
+/* Pequeños cambios de estilos al login */
+.title_form {
     color: #1a73e8;
 }
-h2{
+h2 {
     color: #ededed;
     font-size: 40px;
 }
 
-/*mejoras al inicio Home adicional solo estilos para una mejor visualización*/
+/* Mejoras al inicio Home */
 .home-container {
     background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
     min-height: 100vh;
@@ -67,3 +67,61 @@ h2{
     margin: 0 auto 1.5rem;
     box-shadow: 0 8px 20px rgba(26, 115, 232, 0.3);
 }
+
+/* ============================================================ */
+/* --- INICIO APORTE JHON: SISTEMA DE MODO OSCURO --- */
+/* ============================================================ */
+
+/* 1. Fondo general y texto base */
+.dark-theme {
+    background-color: #1a1a1a !important;
+    color: #e0e0e0 !important;
+    transition: all 0.3s ease;
+}
+
+/* 2. Forzar fondo oscuro en secciones con degradados de compañeros */
+.dark-theme .home-container, 
+.dark-theme .main_Home, 
+.dark-theme .main_Login, 
+.dark-theme .main_registro, 
+.dark-theme .main_Habits {
+    background: #1a1a1a !important;
+    color: #e0e0e0 !important;
+}
+
+/* 3. Estilos para tarjetas (Cards) de hábitos */
+.dark-theme .card {
+    background-color: #2d2d2d !important;
+    color: white !important;
+    border: 1px solid #444 !important;
+}
+
+/* 4. Ajuste de textos de formularios y etiquetas */
+.dark-theme .title_form {
+    color: #4da3ff !important;
+}
+
+.dark-theme label, .dark-theme p, .dark-theme span:not(.navbar-text) {
+    color: #ced4da !important;
+}
+
+/* 5. Ajuste de Inputs para que sean legibles */
+.dark-theme .input-underlined {
+    background-color: transparent !important;
+    color: white !important;
+    border-bottom-color: #555 !important;
+}
+
+.dark-theme .input-underlined:focus {
+    border-bottom-color: #4da3ff !important;
+}
+
+/* 6. Ajuste de modales o fondos secundarios */
+.dark-theme .modal-content {
+    background-color: #2d2d2d !important;
+    color: white !important;
+}
+
+/* ============================================================ */
+/* --- FIN APORTE JHON --- */
+/* ============================================================ */

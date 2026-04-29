@@ -1,12 +1,13 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 export const Registro = () => {
+	const [nombre, setNombre] = useState("");
+	const [apellido, setApellido] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [error, setError] = useState(null);
-	const [success, setSuccess] = useState(false);
 	const navigate = useNavigate();
 
 	const handleRegistro = async (e) => {
@@ -21,12 +22,14 @@ export const Registro = () => {
 		const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/registro", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ email, password })
+			body: JSON.stringify({ nombre, apellido, email, password })
 		});
 
 		if (response.ok) {
-			setSuccess(true);
-			setTimeout(() => navigate("/login"), 2000);
+			const data = await response.json();
+			sessionStorage.setItem("token", data.token);
+			sessionStorage.setItem("nombre", data.nombre);
+			navigate("/habitos");
 		} else {
 			const data = await response.json();
 			setError(data.msg || "Error al registrarse");
@@ -41,8 +44,29 @@ export const Registro = () => {
 						<i className="fa-solid fa-user-plus me-2 text-primary"></i>Crear Cuenta
 					</h3>
 					{error && <div className="alert alert-danger">{error}</div>}
-					{success && <div className="alert alert-success">¡Registro exitoso! Redirigiendo...</div>}
 					<form onSubmit={handleRegistro}>
+						<div className="mb-3">
+							<label className="form-label">Nombre</label>
+							<input
+								type="text"
+								className="form-control"
+								value={nombre}
+								onChange={e => setNombre(e.target.value)}
+								placeholder="Tu nombre"
+								required
+							/>
+						</div>
+						<div className="mb-3">
+							<label className="form-label">Apellido</label>
+							<input
+								type="text"
+								className="form-control"
+								value={apellido}
+								onChange={e => setApellido(e.target.value)}
+								placeholder="Tu apellido"
+								required
+							/>
+						</div>
 						<div className="mb-3">
 							<label className="form-label">Correo electrónico</label>
 							<input
