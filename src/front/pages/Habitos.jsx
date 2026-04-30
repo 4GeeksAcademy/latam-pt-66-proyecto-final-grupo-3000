@@ -454,11 +454,7 @@ export const Habitos = () => {
 						) : "Mis Hábitos"}
 					</h2>
 				</div>
-				{!isFiltered && (
-					<button className="btn btn-outline-secondary btn-sm" onClick={() => navigate("/historial")}>
-						<i className="fa-solid fa-calendar-check me-1"></i>Ver historial
-					</button>
-				)}
+				
 			</div>
 			<p className="text-muted mb-3">Hola, {nombreUsuario}</p>
 
