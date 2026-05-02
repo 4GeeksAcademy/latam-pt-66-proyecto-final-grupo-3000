@@ -1,13 +1,8 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-// --- INICIO APORTE JHON: Importación corregida del hook ---
 import useGlobalReducer from "../hooks/useGlobalReducer"; 
-// --- FIN APORTE JHON ---
 
 export const Navbar = () => {
-    // --- INICIO APORTE JHON: Uso del reducer global ---
     const { store, dispatch } = useGlobalReducer();
-    // --- FIN APORTE JHON ---
-
     const navigate = useNavigate();
     useLocation(); 
     const token = sessionStorage.getItem("token");
@@ -27,18 +22,20 @@ export const Navbar = () => {
                 </Link>
                 <div className="ms-auto d-flex align-items-center gap-2">
                     
-                    {/* --- INICIO APORTE JHON: Botón Modo Oscuro --- */}
+                    {/* BOTONES DE JHON */}
+                    <Link to="/suscripciones">
+                        <button className="btn btn-warning btn-sm fw-bold">
+                            {store.plan === 'premium' ? "Plan Premium" : "Planes"}
+                        </button>
+                    </Link>
+
                     <button 
-                        className="btn btn-outline-light btn-sm me-3" 
+                        className="btn btn-outline-light btn-sm" 
                         onClick={() => dispatch({ type: 'toggle_dark_mode' })}
                     >
-                        {store.darkMode ? (
-                            <span><i className="fa-solid fa-sun me-1"></i>Modo Claro</span>
-                        ) : (
-                            <span><i className="fa-solid fa-moon me-1"></i>Modo Oscuro</span>
-                        )}
+                        <i className={store.darkMode ? "fa-solid fa-sun" : "fa-solid fa-moon"}></i>
                     </button>
-                    {/* --- FIN APORTE JHON --- */}
+                    {/* --------------- */}
 
                     {token ? (
                         <>
@@ -46,33 +43,22 @@ export const Navbar = () => {
                                 <i className="fa-solid fa-user me-1"></i>{nombre}
                             </span>
                             <Link to="/habitos">
-                                <button className="btn btn-outline-light btn-sm">
-                                    <i className="fa-solid fa-list-check me-1"></i>Mis Hábitos
-                                </button>
+                                <button className="btn btn-outline-light btn-sm">Mis Hábitos</button>
                             </Link>
                             <Link to="/historial">
-                                <button className="btn btn-outline-light btn-sm">
-                                    <i className="fa-solid fa-calendar-check me-1"></i>Historial
-                                </button>
+                                <button className="btn btn-outline-light btn-sm">Historial</button>
                             </Link>
-<Link to="/exportar">
-								<button className="btn btn-outline-light btn-sm">
-									<i className="fa-solid fa-file-export me-1"></i>Exportar
-								</button>
-							</Link>
-							<Link to="/reconocimientos">
-								<button className="btn btn-outline-light btn-sm">
-									<i className="fa-solid fa-trophy me-1"></i>Logros
-								</button>
-							</Link>
-							<Link to="/perfil">
-								<button className="btn btn-outline-light btn-sm">
-									<i className="fa-solid fa-gear me-1"></i>Mi Perfil
-								</button>
-							</Link>
-
+                            <Link to="/exportar">
+                                <button className="btn btn-outline-light btn-sm">Exportar</button>
+                            </Link>
+                            <Link to="/reconocimientos">
+                                <button className="btn btn-outline-light btn-sm">Logros</button>
+                            </Link>
+                            <Link to="/perfil">
+                                <button className="btn btn-outline-light btn-sm">Mi Perfil</button>
+                            </Link>
                             <button className="btn btn-outline-light btn-sm" onClick={handleLogout}>
-                                <i className="fa-solid fa-right-from-bracket me-1"></i>Cerrar Sesión
+                                <i className="fa-solid fa-right-from-bracket"></i>
                             </button>
                         </>
                     ) : (

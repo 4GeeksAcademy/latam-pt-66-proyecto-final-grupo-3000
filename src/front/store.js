@@ -1,45 +1,37 @@
-export const initialStore=()=>{
-  return{
-    message: null,
-    token: null,
-    darkMode: false, // <-- 1. Agregamos la variable aquí
-    todos: [
-      {
-        id: 1,
-        title: "Make the bed",
-        background: null,
-      },
-      {
-        id: 2,
-        title: "Do my homework",
-        background: null,
-      }
-    ]
-  }
-}
+// CORRECCIÓN: Ahora es una función que retorna el objeto inicial
+export const initialStore = () => {
+    return {
+        // --- TUS PLANES ---
+        plan: 'free',
+        darkMode: false,
+        
+        // --- TRABAJO DE COMPAÑEROS (MANTENIDO) ---
+        message: null,
+        habitos: [
+            { id: 1, nombre: "Beber agua", completado: false },
+            { id: 2, nombre: "Hacer ejercicio", completado: false }
+        ]
+    };
+};
 
-export default function storeReducer(store, action = {}) {
-  switch(action.type){
-    case 'set_hello':
-      return {
-        ...store,
-        message: action.payload
-      };
-
-    case 'toggle_dark_mode': // <-- 2. Agregamos este "caso" nuevo
-      return {
-        ...store,
-        darkMode: !store.darkMode // Esto cambia de true a false y viceversa
-      };
-      
-    case 'add_task':
-      const { id,  color } = action.payload
-      return {
-        ...store,
-        todos: store.todos.map((todo) => (todo.id === id ? { ...todo, background: color } : todo))
-      };
-
-    default:
-      return store; // Cambié el Error por retornar el store para que no se trabe tu App
-  }    
+export default function globalReducer(store, action) {
+    switch (action.type) {
+        case 'set_message':
+            return {
+                ...store,
+                message: action.payload
+            };
+        case 'change_plan':
+            return {
+                ...store,
+                plan: action.payload
+            };
+        case 'toggle_dark_mode':
+            return {
+                ...store,
+                darkMode: !store.darkMode
+            };
+        default:
+            return store;
+    }
 }

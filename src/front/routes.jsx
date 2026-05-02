@@ -15,6 +15,12 @@ import { Perfil } from "./pages/Perfil.jsx";
 import { Historial } from "./pages/Historial.jsx";
 import { Exportar } from "./pages/exportar.jsx";
 import { Reconocimientos } from "./pages/Reconocimientos.jsx";
+
+// --- APORTE JHON: Importaciones verificadas ---
+import { Checkout } from "./pages/Checkout.jsx"; 
+import { Suscripciones } from "./pages/Suscripciones.jsx";
+// --- FIN APORTE JHON ---
+
 import { Acercade } from "./components/Acercade.jsx";
 import { Ayuda } from "./components/Ayuda.jsx";
 
@@ -26,6 +32,12 @@ export const router = createBrowserRouter(
       <Route path="/demo" element={<Demo />} />
       <Route path="/login" element={<Login />} />
       <Route path="/registro" element={<Registro />} />
+      
+      {/* --- APORTE JHON: Rutas de pagos y suscripciones --- */}
+      <Route path="/suscripciones" element={<Suscripciones />} />
+      <Route path="/checkout" element={<Checkout />} />
+      {/* --- FIN APORTE JHON --- */}
+
       <Route path="/habitos" element={<Habitos />} />
       <Route path="/perfil" element={<Perfil />} />
       <Route path="/historial" element={<Historial />} />
@@ -36,4 +48,3 @@ export const router = createBrowserRouter(
     </Route>
   )
 );
-
