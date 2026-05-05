@@ -9,6 +9,9 @@ export const Footer = () => (
 			</span>
 			<span>Construye mejores hábitos, un día a la vez.</span>
 			<div className="mt-4 d-flex justify-content-center gap-3">
+				<Link to="/quienes-somos" className="btn btn-outline-light btn-sm rounded-pill" style={{ width: "150px", paddingTop: "13px" }}>
+					¿Quiénes somos?
+				</Link>
 				<Link to="/acercade" className="btn btn-outline-light btn-sm rounded-pill" style={{ width: "150px", paddingTop: "13px" }}>
 					Sobre Habit Tracker
 				</Link>

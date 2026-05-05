@@ -23,6 +23,7 @@ import { Suscripciones } from "./pages/Suscripciones.jsx";
 
 import { Acercade } from "./components/Acercade.jsx";
 import { Ayuda } from "./components/Ayuda.jsx";
+import { QuienesSomos } from "./pages/QuienesSomos.jsx";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -45,6 +46,7 @@ export const router = createBrowserRouter(
       <Route path="/reconocimientos" element={<Reconocimientos />} />
       <Route path="/acercade" element={<Acercade />} />
       <Route path="/faq" element={<Ayuda />} />
+      <Route path="/quienes-somos" element={<QuienesSomos />} />
     </Route>
   )
 );
