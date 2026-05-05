@@ -44,7 +44,7 @@ export const router = createBrowserRouter(
       <Route path="/exportar" element={<Exportar />} />
       <Route path="/reconocimientos" element={<Reconocimientos />} />
       <Route path="/acercade" element={<Acercade />} />
-      <Route path="/ayuda" element={<Ayuda />} />
+      <Route path="/faq" element={<Ayuda />} />
     </Route>
   )
 );

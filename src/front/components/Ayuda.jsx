@@ -4,12 +4,11 @@ import { Link } from "react-router-dom";
 export const Ayuda = () => {
     return (
         <div className="container mt-5 pt-5 mb-5">
-            <h1 className="text-center mb-4 mt-5">Centro de Ayuda</h1>
+            <h1 className="text-center mb-4">Preguntas Frecuentes</h1>
             <p className="text-center text-muted mb-5">¿Tienes dudas sobre cómo usar Habit Tracker? Aquí te respondemos.</p>
 
             <div className="accordion shadow-sm" id="accordionExample">
 
-                {/* Pregunta 1: Registro */}
                 <div className="accordion-item">
                     <h2 className="accordion-header">
                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
@@ -23,7 +22,6 @@ export const Ayuda = () => {
                     </div>
                 </div>
 
-                {/* Pregunta 2: Exportar  */}
                 <div className="accordion-item">
                     <h2 className="accordion-header">
                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
@@ -37,7 +35,6 @@ export const Ayuda = () => {
                     </div>
                 </div>
 
-                {/* Pregunta 3: Historial */}
                 <div className="accordion-item">
                     <h2 className="accordion-header">
                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
@@ -52,7 +49,6 @@ export const Ayuda = () => {
                     </div>
                 </div>
 
-                {/* Pregunta 4: Logros */}
                 <div className="accordion-item">
                     <h2 className="accordion-header">
                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
