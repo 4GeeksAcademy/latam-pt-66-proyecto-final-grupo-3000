@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import marlonImg from "../assets/img/Marlon_Hodgson_Software_Marketing_Engineer.webp";
-
-const joseImg = "https://placehold.co/400x320?text=José+Mujica";
+import alfredoImg from "../assets/img/Alfredo_Mujica.webp";
+import jhonImg from "../assets/img/Jhon_Gómez.webp";
+import miguelImg from "../assets/img/Miguel_Eduardo.webp";
 
 const equipo = [
     {
@@ -18,8 +19,20 @@ const equipo = [
     },
     {
         nombre: "José Alfredo Mujica",
-        foto: joseImg,
+        foto: alfredoImg,
         descripcion: "Especialista en infraestructura de telecomunicaciones con amplia experiencia en la configuración de equipos Mikrotik (Certificado MTCNA, MTCRE, MTCWE, MTCTCE), Cisco, Ubiquiti y Mimosa. Con sólidos conocimientos en despliegue y gestión de redes FTTH, actualmente expande su perfil como Full Stack Developer con el objetivo de fusionar el desarrollo de software con el mundo de las redes y automatizar procesos de infraestructura.",
+        skills: []
+    },
+    {
+        nombre: "Jhon Gómez",
+        foto: jhonImg,
+        descripcion: "Contador Público con postgrado en Impuestos y experiencia en finanzas y consultoría de sistemas ERP como SAP y Prinex. Su trayectoria se ha centrado en la gestión financiera y el análisis fiscal, utilizando la tecnología como herramienta clave para optimizar procesos y asegurar el cumplimiento de objetivos de negocio. Actualmente expande sus capacidades técnicas como Full Stack Developer en 4Geeks Academy, buscando integrar sus conocimientos en consultoría con soluciones tecnológicas innovadoras.",
+        skills: []
+    },
+    {
+        nombre: "Miguel Urrieta",
+        foto: miguelImg,
+        descripcion: "Auditor expedicionario en bodega de materiales para construcción y diseño de hogar, actualmente formando su carrera en el mundo de la tecnología con el fin de aumentar sus conocimientos y aplicar nuevos métodos más efectivos en el ámbito laboral, apoyándose en el desarrollo de software como herramienta de crecimiento profesional y personal.",
         skills: []
     },
 ];
