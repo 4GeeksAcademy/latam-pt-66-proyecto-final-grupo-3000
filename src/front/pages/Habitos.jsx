@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { buildAchievementStats, evaluateAchievements, saveUnlockedAchievements } from "../utils/achievements";
+import useGlobalReducer from "../hooks/useGlobalReducer";
 
 const COLORES = [
 	{ valor: "primary", etiqueta: "Azul" },
@@ -12,8 +13,11 @@ const COLORES = [
 	{ valor: "dark", etiqueta: "Negro" },
 ];
 
+const MAX_HABITOS_FREE = 3;
+
 export const Habitos = () => {
 	const navigate = useNavigate();
+	const { store } = useGlobalReducer();
 	const [searchParams] = useSearchParams();
 	const filtroUrl = searchParams.get("filtro");
 	const idDestacado = searchParams.get("id") ? parseInt(searchParams.get("id")) : null;
@@ -45,6 +49,7 @@ export const Habitos = () => {
 	const [editCatNombre, setEditCatNombre] = useState("");
 	const [editCatColor, setEditCatColor] = useState("primary");
 	const [errorEditarCat, setErrorEditarCat] = useState("");
+	const [mostrarModalLimite, setMostrarModalLimite] = useState(false);
 	const [nuevosLogros, setNuevosLogros] = useState([]);
 
 	useEffect(() => {
@@ -105,6 +110,10 @@ export const Habitos = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setError("");
+		if (store.plan === "free" && habitos.length >= MAX_HABITOS_FREE) {
+			setMostrarModalLimite(true);
+			return;
+		}
 		if (!nombreHabito.trim()) { setError("El nombre del hábito es requerido."); return; }
 		const resp = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/habitos", {
 			method: "POST",
@@ -464,6 +473,11 @@ export const Habitos = () => {
 					<div className="col-12 col-md-6">
 						<div className="card shadow-sm border-0 p-4" style={{ borderRadius: "16px" }}>
 							<h5 className="mb-3"><i className="fa-solid fa-plus me-2 text-primary"></i>Nuevo hábito</h5>
+							{store.plan === "free" && (
+								<div className="alert alert-info py-2" role="alert">
+									Plan gratuito: {habitos.length}/{MAX_HABITOS_FREE} hábitos.
+								</div>
+							)}
 							{error && <div className="alert alert-danger">{error}</div>}
 							<form onSubmit={handleSubmit}>
 								<div className="mb-3">
@@ -618,6 +632,49 @@ export const Habitos = () => {
 									</button>
 									<button type="button" className="btn btn-primary" onClick={() => guardarEdicionCategoria(editandoCatId)}>
 										Guardar cambios
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className="modal-backdrop fade show"></div>
+				</>
+			)}
+
+			{mostrarModalLimite && (
+				<>
+					<div className="modal fade show d-block" tabIndex="-1" role="dialog" aria-modal="true">
+						<div className="modal-dialog modal-dialog-centered" role="document">
+							<div className="modal-content">
+								<div className="modal-header">
+									<h5 className="modal-title">Límite del plan gratuito</h5>
+									<button
+										type="button"
+										className="btn-close"
+										aria-label="Close"
+										onClick={() => setMostrarModalLimite(false)}></button>
+								</div>
+								<div className="modal-body">
+									<p className="mb-0">
+										Solo tienes {MAX_HABITOS_FREE} hábitos permitidos en el plan gratuito.
+										 Para crear más, debes registrarte como Premium.
+									</p>
+								</div>
+								<div className="modal-footer">
+									<button
+										type="button"
+										className="btn btn-outline-secondary"
+										onClick={() => setMostrarModalLimite(false)}>
+										Cerrar
+									</button>
+									<button
+										type="button"
+										className="btn btn-warning"
+										onClick={() => {
+											setMostrarModalLimite(false);
+											navigate("/suscripciones");
+										}}>
+										Mejorar a Premium
 									</button>
 								</div>
 							</div>

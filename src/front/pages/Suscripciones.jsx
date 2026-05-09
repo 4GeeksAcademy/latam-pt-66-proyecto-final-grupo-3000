@@ -13,9 +13,9 @@ export const Suscripciones = () => {
 
     return (
         <div className="container py-5 mt-5">
-            <h2 className="text-center mb-5 fw-bold">Mejora tu estilo de vida con Premium</h2>
+            <h2 className="text-center mb-5 fw-bold color-titulo-plan">Mejora tu estilo de vida con Premium</h2>
             <div className="row justify-content-center">
-                
+
                 {/* Tarjeta Plan Gratis */}
                 <div className="col-md-4 mb-4">
                     <div className={`card h-100 shadow-sm ${store.plan === 'free' ? 'border-primary border-3' : ''}`}>
@@ -25,10 +25,11 @@ export const Suscripciones = () => {
                             <hr />
                             <ul className="list-unstyled mb-4 flex-grow-1 text-start ms-3">
                                 <li className="mb-2"><i className="fa-solid fa-check text-success me-2"></i> Hasta 3 hábitos</li>
+                                <li className="mb-2"><i className="fa-solid fa-check text-success me-2"></i> historial de Cada Hábito</li>
                                 <li className="mb-2"><i className="fa-solid fa-check text-success me-2"></i> Modo Oscuro</li>
                                 <li className="mb-2"><i className="fa-solid fa-xmark text-danger me-2"></i> Notas de reflexión</li>
                             </ul>
-                            <button 
+                            <button
                                 onClick={handleSelectFree}
                                 className={`btn btn-lg ${store.plan === 'free' ? 'btn-primary disabled' : 'btn-outline-primary'}`}
                                 disabled={store.plan === 'free'}
@@ -49,12 +50,13 @@ export const Suscripciones = () => {
                             <ul className="list-unstyled mb-4 flex-grow-1 text-start ms-3">
                                 <li className="mb-2"><i className="fa-solid fa-crown text-warning me-2"></i> <strong>Hábitos ilimitados</strong></li>
                                 <li className="mb-2"><i className="fa-solid fa-check text-success me-2"></i> Modo Oscuro total</li>
+                                <li className="mb-2"><i className="fa-solid fa-check text-success me-2"></i> historial de Cada Hábito</li>
                                 <li className="mb-2"><i className="fa-solid fa-check text-success me-2"></i> Notas de reflexión diarias</li>
                                 <li className="mb-2"><i className="fa-solid fa-star text-warning me-2"></i> Soporte VIP 24/7</li>
-                                <li className="mb-2"><i className="fa-solid fa-chart-line text-primary me-2"></i> Estadísticas avanzadas</li>
+                                <li className="mb-2"><i className="fa-solid fa-star text-warning me-2"></i> Atención personalizada</li>
                             </ul>
-                            
-                            <button 
+
+                            <button
                                 onClick={() => navigate("/checkout")}
                                 className={`btn btn-lg ${store.plan === 'premium' ? 'btn-warning disabled' : 'btn-warning'}`}
                                 disabled={store.plan === 'premium'}

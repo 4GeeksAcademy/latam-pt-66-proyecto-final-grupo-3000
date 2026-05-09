@@ -15,7 +15,7 @@ export const Navbar = () => {
     };
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-gradient-blue-bar">
             <div className="container">
                 <Link className="navbar-brand fw-bold" to="/">
                     <i className="fa-solid fa-list-check me-2"></i>Habit Tracker

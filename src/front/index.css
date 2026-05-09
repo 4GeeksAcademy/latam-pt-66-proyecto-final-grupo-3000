@@ -6,6 +6,19 @@
     border-radius: 0 0 40px 40px;
 }
 
+
+.bg-gradient-blue-bar {
+    background: linear-gradient(180deg, #1aa3e8 0%, #02358c 100%);
+}
+
+.color-titulo-plan{
+    color: #1a73e8;
+}
+
+ .card-body h2.card-price {
+    color: #909090;
+}
+
 @media (min-width: 768px) {
     .bg-gradient-blue {
         border-radius: 24px 0 0 24px;
