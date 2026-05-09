@@ -6,6 +6,8 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
 
+MAX_HABITOS_FREE = 3
+
 api = Blueprint('api', __name__)
 
 CORS(api)
@@ -26,7 +28,7 @@ def handle_login():
         return jsonify({"msg": "Email o contraseña incorrectas"}), 401
 
     access_token = create_access_token(identity=str(user.id))
-    return jsonify({"token": access_token, "user_id": user.id, "nombre": user.nombre}), 200
+    return jsonify({"token": access_token, "user_id": user.id, "nombre": user.nombre, "plan": user.plan}), 200
 
 
 @api.route('/registro', methods=['POST'])
@@ -43,12 +45,12 @@ def handle_registro():
         return jsonify({"msg": "El usuario ya existe"}), 400
 
     new_user = User(nombre=nombre, apellido=apellido, email=email,
-                    password=generate_password_hash(password), is_active=True)
+                    password=generate_password_hash(password), is_active=True, plan="free")
     db.session.add(new_user)
     db.session.commit()
 
     access_token = create_access_token(identity=str(new_user.id))
-    return jsonify({"token": access_token, "user_id": new_user.id, "nombre": new_user.nombre}), 201
+    return jsonify({"token": access_token, "user_id": new_user.id, "nombre": new_user.nombre, "plan": new_user.plan}), 201
 
 
 @api.route('/signup', methods=['POST'])
@@ -69,15 +71,52 @@ def handle_signup():
         return jsonify({"msg": "El usuario ya existe"}), 400
 
     new_user = User(nombre=nombre, apellido=apellido, email=email,
-                    password=generate_password_hash(password), is_active=True)
+                    password=generate_password_hash(password), is_active=True, plan="free")
     try:
         db.session.add(new_user)
         db.session.commit()
         access_token = create_access_token(identity=str(new_user.id))
-        return jsonify({"token": access_token, "user_id": new_user.id, "nombre": new_user.nombre}), 201
+        return jsonify({"token": access_token, "user_id": new_user.id, "nombre": new_user.nombre, "plan": new_user.plan}), 201
     except Exception:
         db.session.rollback()
         return jsonify({"msg": "Error al guardar"}), 500
+
+
+@api.route('/suscripcion', methods=['GET'])
+@jwt_required()
+def obtener_suscripcion():
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"msg": "Usuario no encontrado"}), 404
+    return jsonify({"plan": user.plan}), 200
+
+
+@api.route('/suscripcion', methods=['PUT'])
+@jwt_required()
+def actualizar_suscripcion():
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"msg": "Usuario no encontrado"}), 404
+
+    nuevo_plan = request.json.get("plan", "").strip().lower()
+    if nuevo_plan not in ["free", "premium"]:
+        return jsonify({"msg": "Plan inválido"}), 400
+
+    # Si el usuario baja de premium a free, eliminar/desactivar hábitos extra
+    if user.plan == "premium" and nuevo_plan == "free":
+        # Obtener los hábitos activos ordenados por fecha de creación (id ascendente)
+        habitos_activos = Habito.query.filter_by(user_id=user.id, is_active=True).order_by(Habito.id.asc()).all()
+        if len(habitos_activos) > MAX_HABITOS_FREE:
+            # Mantener solo los primeros tres, desactivar el resto
+            for habito in habitos_activos[MAX_HABITOS_FREE:]:
+                habito.is_active = False
+            db.session.commit()
+
+    user.plan = nuevo_plan
+    db.session.commit()
+    return jsonify({"msg": "Plan actualizado", "plan": user.plan}), 200
 
 
 @api.route('/categorias', methods=['GET'])
@@ -127,12 +166,21 @@ def listar_habitos():
 @jwt_required()
 def crear_habito():
     user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"msg": "Usuario no encontrado"}), 404
+
     nombre = request.json.get("nombre", None)
     descripcion = request.json.get("descripcion", "")
     categoria_id = request.json.get("categoria_id", None)
 
     if not nombre:
         return jsonify({"msg": "El nombre del hábito es requerido"}), 400
+
+    if user.plan == "free":
+        total_habitos_activos = Habito.query.filter_by(user_id=user_id, is_active=True).count()
+        if total_habitos_activos >= MAX_HABITOS_FREE:
+            return jsonify({"msg": "Solo tienes 3 hábitos permitidos en el plan gratuito. Para crear más, debes registrarte como Premium."}), 403
 
     habito = Habito(nombre=nombre, descripcion=descripcion,
                     is_active=True, user_id=user_id, categoria_id=categoria_id)

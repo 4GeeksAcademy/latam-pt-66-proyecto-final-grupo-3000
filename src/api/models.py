@@ -13,6 +13,7 @@ class User(db.Model):
     email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String(256), nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)
+    plan: Mapped[str] = mapped_column(String(20), nullable=False, default="free")
     habitos: Mapped[list["Habito"]] = relationship("Habito", back_populates="user")
 
     def serialize(self):
@@ -21,6 +22,7 @@ class User(db.Model):
             "nombre": self.nombre,
             "apellido": self.apellido,
             "email": self.email,
+            "plan": self.plan,
         }
 
 

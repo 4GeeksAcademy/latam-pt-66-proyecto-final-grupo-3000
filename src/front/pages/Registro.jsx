@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const Registro = () => {
+	const { dispatch } = useGlobalReducer();
 	const [nombre, setNombre] = useState("");
 	const [apellido, setApellido] = useState("");
 	const [email, setEmail] = useState("");
@@ -29,6 +31,7 @@ export const Registro = () => {
 			const data = await response.json();
 			sessionStorage.setItem("token", data.token);
 			sessionStorage.setItem("nombre", data.nombre);
+			dispatch({ type: "change_plan", payload: data.plan || "free" });
 			navigate("/habitos");
 		} else {
 			const data = await response.json();
