@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
+import { AuthShell } from "../components/AuthShell.jsx";
 
 export const Registro = () => {
 	const { dispatch } = useGlobalReducer();
@@ -40,79 +41,86 @@ export const Registro = () => {
 	};
 
 	return (
-		<div className="container d-flex justify-content-center align-items-center" style={{ minHeight: "80vh" }}>
-			<div className="card shadow" style={{ width: "100%", maxWidth: "420px" }}>
-				<div className="card-body p-4">
-					<h3 className="card-title text-center mb-4">
-						<i className="fa-solid fa-user-plus me-2 text-primary"></i>Crear Cuenta
-					</h3>
-					{error && <div className="alert alert-danger">{error}</div>}
-					<form onSubmit={handleRegistro}>
-						<div className="mb-3">
-							<label className="form-label">Nombre</label>
-							<input
-								type="text"
-								className="form-control"
-								value={nombre}
-								onChange={e => setNombre(e.target.value)}
-								placeholder="Tu nombre"
-								required
-							/>
-						</div>
-						<div className="mb-3">
-							<label className="form-label">Apellido</label>
-							<input
-								type="text"
-								className="form-control"
-								value={apellido}
-								onChange={e => setApellido(e.target.value)}
-								placeholder="Tu apellido"
-								required
-							/>
-						</div>
-						<div className="mb-3">
-							<label className="form-label">Correo electrónico</label>
-							<input
-								type="email"
-								className="form-control"
-								value={email}
-								onChange={e => setEmail(e.target.value)}
-								placeholder="correo@ejemplo.com"
-								required
-							/>
-						</div>
-						<div className="mb-3">
-							<label className="form-label">Contraseña</label>
-							<input
-								type="password"
-								className="form-control"
-								value={password}
-								onChange={e => setPassword(e.target.value)}
-								placeholder="Mínimo 6 caracteres"
-								minLength={6}
-								required
-							/>
-						</div>
-						<div className="mb-3">
-							<label className="form-label">Confirmar Contraseña</label>
-							<input
-								type="password"
-								className="form-control"
-								value={confirmPassword}
-								onChange={e => setConfirmPassword(e.target.value)}
-								placeholder="Repite tu contraseña"
-								required
-							/>
-						</div>
-						<button type="submit" className="btn btn-primary w-100">
-							Registrarse
-						</button>
-					</form>
-					<p className="text-center mt-3 mb-0">
-						¿Ya tienes cuenta? <Link to="/login">Inicia Sesión</Link>
-					</p>
+		<AuthShell
+			pageClassName="main_registro auth-page auth-page--registro"
+			panelIcon="fa-solid fa-user-plus"
+			panelTitle="¡Crea tu cuenta!"
+			panelText="Regístrate para comenzar a registrar tus hábitos y seguir tu progreso."
+			formTitle="Crear cuenta"
+			formSubtitle="Completa tus datos para continuar"
+			panelClassName="auth-panel--registro"
+			reverse={true}
+		>
+			{error && <div className="alert alert-danger border-0">{error}</div>}
+
+			<form onSubmit={handleRegistro}>
+				<div className="mb-3">
+					<label className="form-label">Nombre</label>
+					<input
+						type="text"
+						className="form-control"
+						value={nombre}
+						onChange={e => setNombre(e.target.value)}
+						placeholder="Tu nombre"
+						required
+					/>
 				</div>
-			</div>
-		</div>
+				<div className="mb-3">
+					<label className="form-label">Apellido</label>
+					<input
+						type="text"
+						className="form-control"
+						value={apellido}
+						onChange={e => setApellido(e.target.value)}
+						placeholder="Tu apellido"
+						required
+					/>
+				</div>
+				<div className="mb-3">
+					<label className="form-label">Correo electrónico</label>
+					<input
+						type="email"
+						className="form-control"
+						value={email}
+						onChange={e => setEmail(e.target.value)}
+						placeholder="correo@ejemplo.com"
+						required
+					/>
+				</div>
+				<div className="mb-3">
+					<label className="form-label">Contraseña</label>
+					<input
+						type="password"
+						className="form-control"
+						value={password}
+						onChange={e => setPassword(e.target.value)}
+						placeholder="Mínimo 6 caracteres"
+						minLength={6}
+						required
+					/>
+				</div>
+				<div className="mb-3">
+					<label className="form-label">Confirmar Contraseña</label>
+					<input
+						type="password"
+						className="form-control"
+						value={confirmPassword}
+						onChange={e => setConfirmPassword(e.target.value)}
+						placeholder="Repite tu contraseña"
+						required
+					/>
+				</div>
+				<button type="submit" className="btn btn-primary login-btn w-100 text-white">
+					Registrarse
+				</button>
+			</form>
+
+			<p className="text-center mt-4 mb-0 small text-muted">
+				¿Ya tienes cuenta?
+				<Link to="/login" className="text-primary fw-bold ms-1 auth-link">
+					Inicia sesión
+				</Link>
+			</p>
+		</AuthShell>
 	);
 };
