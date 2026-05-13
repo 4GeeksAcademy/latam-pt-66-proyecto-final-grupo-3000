@@ -80,7 +80,7 @@ export const Home = () => {
 	];
 
 	return (
-		<div className="container-fluid px-4 mt-4 pb-4">
+		<div className="container-fluid px-4 mt-4 pb-4 home-page">
 			<div className="mb-4">
 				<h2 className="fw-bold">Hola, {nombreUsuario} 👋</h2>
 				<p className="text-muted mb-0">

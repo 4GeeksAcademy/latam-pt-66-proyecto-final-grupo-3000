@@ -72,7 +72,7 @@ export const Historial = () => {
 	}
 
 	return (
-		<div className="container mt-4 pb-4">
+		<div className="container mt-4 pb-4 historial-page">
 			{/* Header */}
 			<div className="d-flex align-items-center gap-3 mb-4">
 				<button className="btn btn-outline-secondary btn-sm" onClick={() => navigate("/habitos")}>

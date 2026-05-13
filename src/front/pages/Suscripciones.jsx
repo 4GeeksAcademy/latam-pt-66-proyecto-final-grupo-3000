@@ -57,7 +57,7 @@ export const Suscripciones = () => {
     };
 
     return (
-        <div className="container py-5 mt-5">
+        <div className="container py-5 mt-5 suscripciones-page">
             <h2 className="text-center mb-5 fw-bold color-titulo-plan">MEJORA TU ESTILO DE VIDA CON PREMIUM</h2>
             {errorPlan && (
                 <div className="alert alert-danger">{errorPlan}</div>

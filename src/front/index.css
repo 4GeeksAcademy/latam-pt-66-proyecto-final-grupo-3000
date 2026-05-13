@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     height: 100%;
 }
 
@@ -8,7 +9,8 @@ body {
     flex-direction: column;
 }
 
-#root, .app-main-wrapper {
+#root,
+.app-main-wrapper {
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
@@ -292,6 +294,86 @@ h2 {
 .dark-theme .modal-content {
     background-color: #2d2d2d !important;
     color: white !important;
+}
+
+/* 7. Mejora de contraste para tarjetas de Historial en modo oscuro */
+.dark-theme .historial-page .card {
+    background-color: #2b3038 !important;
+    border-color: #3d4552 !important;
+}
+
+.dark-theme .historial-page .card .text-muted,
+.dark-theme .historial-page .text-muted {
+    color: #d8e1ec !important;
+}
+
+.dark-theme .historial-page .card .fw-bold,
+.dark-theme .historial-page .card .small,
+.dark-theme .historial-page .card-body,
+.dark-theme .historial-page .card-body div {
+    color: #f5f8ff !important;
+}
+
+/* 8. Mejora de contraste para Reconocimientos en modo oscuro */
+.dark-theme .reconocimientos-page .card {
+    background-color: #2b3038 !important;
+    border-color: #3d4552 !important;
+}
+
+.dark-theme .reconocimientos-page .card .text-muted,
+.dark-theme .reconocimientos-page .text-muted,
+.dark-theme .reconocimientos-page .small {
+    color: #d8e1ec !important;
+}
+
+.dark-theme .reconocimientos-page .card h5,
+.dark-theme .reconocimientos-page .card .fw-bold,
+.dark-theme .reconocimientos-page .card-body,
+.dark-theme .reconocimientos-page .card-body div {
+    color: #f5f8ff !important;
+}
+
+/* 9. Mejora de contraste para Planes en modo oscuro */
+.dark-theme .suscripciones-page .card {
+    background-color: #2b3038 !important;
+    border-color: #3d4552 !important;
+}
+
+.dark-theme .suscripciones-page .card-title,
+.dark-theme .suscripciones-page .card-price,
+.dark-theme .suscripciones-page .card-price small,
+.dark-theme .suscripciones-page .card li,
+.dark-theme .suscripciones-page .card-body,
+.dark-theme .suscripciones-page .card-body div {
+    color: #f5f8ff !important;
+}
+
+.dark-theme .suscripciones-page hr {
+    border-color: #5f6875;
+}
+
+.dark-theme .suscripciones-page .text-muted {
+    color: #d8e1ec !important;
+}
+
+/* 10. Mejora de contraste para Home (pantalla principal) en modo oscuro */
+.dark-theme .home-page .card {
+    background-color: #2b3038 !important;
+    border-color: #3d4552 !important;
+}
+
+.dark-theme .home-page .card .text-muted,
+.dark-theme .home-page .text-muted,
+.dark-theme .home-page .small {
+    color: #d8e1ec !important;
+}
+
+.dark-theme .home-page .card .card-title,
+.dark-theme .home-page .card .fw-bold,
+.dark-theme .home-page .card-body,
+.dark-theme .home-page .card-body p,
+.dark-theme .home-page .card-body h6 {
+    color: #f5f8ff !important;
 }
 
 /* ============================================================ */

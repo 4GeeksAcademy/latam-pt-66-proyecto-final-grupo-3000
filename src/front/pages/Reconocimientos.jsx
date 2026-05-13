@@ -90,7 +90,7 @@ export const Reconocimientos = () => {
     }
 
     return (
-        <div className="container mt-4 pb-4">
+        <div className="container mt-4 pb-4 reconocimientos-page">
             <div className="d-flex align-items-center gap-3 mb-4 flex-wrap">
                 <button className="btn btn-outline-secondary btn-sm" onClick={() => navigate("/habitos")}>
                     <i className="fa-solid fa-arrow-left me-1"></i>Volver
