@@ -75,7 +75,7 @@ export const Suscripciones = () => {
                                 <li className="mb-2"><i className="fa-solid fa-check text-success me-2"></i> Hasta 3 hábitos</li>
                                 <li className="mb-2"><i className="fa-solid fa-check text-success me-2"></i> Historial de hábitos</li>
                                 <li className="mb-2"><i className="fa-solid fa-check text-success me-2"></i> Modo Oscuro</li>
-                                <li className="mb-2"><i className="fa-solid fa-xmark text-danger me-2"></i> Notas de reflexión</li>
+                                <li className="mb-2"><i className="fa-solid fa-xmark text-danger me-2"></i> Soporte VIP 24/7</li>
                             </ul>
                             <button
                                 onClick={() => setShowConfirmFreeModal(true)}

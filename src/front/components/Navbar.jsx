@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 
@@ -7,6 +8,33 @@ export const Navbar = () => {
     useLocation();
     const token = sessionStorage.getItem("token");
     const nombre = sessionStorage.getItem("nombre");
+    const isPremium = store.plan === "premium";
+    const [showVipModal, setShowVipModal] = useState(false);
+
+    const soporteVip = {
+        contactos: [
+            {
+                nombre: "Marlon Hodgson",
+                correo: "marlon.hodgson@habittracker.dev",
+                telefono: "+58 412-101-0101",
+            },
+            {
+                nombre: "Jose Alfredo Mujica",
+                correo: "alfredo.mujica@habittracker.dev",
+                telefono: "+58 414-202-0202",
+            },
+            {
+                nombre: "Jhon Gomez",
+                correo: "jhon.gomez@habittracker.dev",
+                telefono: "+58 424-303-0303",
+            },
+            {
+                nombre: "Miguel Urrieta",
+                correo: "miguel.urrieta@habittracker.dev",
+                telefono: "+58 416-404-0404",
+            },
+        ],
+    };
 
     const handleLogout = () => {
         sessionStorage.removeItem("token");
@@ -15,6 +43,7 @@ export const Navbar = () => {
     };
 
     return (
+        <>
         <nav className="navbar navbar-expand-lg navbar-dark bg-gradient-blue-bar">
             <div className="container">
                 <Link className="navbar-brand fw-bold" to="/">
@@ -75,6 +104,20 @@ export const Navbar = () => {
                                         <i className="fa-solid fa-gear me-2"></i>Mi Perfil
                                     </Link>
                                 </li>
+                                {isPremium && (
+                                    <>
+                                        <li><hr className="dropdown-divider" /></li>
+                                        <li>
+                                            <button
+                                                type="button"
+                                                className="dropdown-item text-warning fw-semibold"
+                                                onClick={() => setShowVipModal(true)}
+                                            >
+                                                <i className="fa-solid fa-crown me-2"></i>Soporte VIP 24/7
+                                            </button>
+                                        </li>
+                                    </>
+                                )}
                                 <li><hr className="dropdown-divider" /></li>
                                 <li>
                                     <button className="dropdown-item text-danger" onClick={handleLogout}>
@@ -96,5 +139,56 @@ export const Navbar = () => {
                 </div>
             </div>
         </nav>
+
+        {showVipModal && (
+            <>
+                <div className="modal fade show d-block" tabIndex="-1" role="dialog" aria-modal="true">
+                    <div className="modal-dialog modal-dialog-centered" role="document">
+                        <div className="modal-content border-0 shadow">
+                            <div className="modal-header">
+                                <h5 className="modal-title text-warning fw-bold">
+                                    <i className="fa-solid fa-crown me-2"></i>Soporte VIP 24/7
+                                </h5>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    aria-label="Close"
+                                    onClick={() => setShowVipModal(false)}
+                                ></button>
+                            </div>
+                            <div className="modal-body">
+                                <p className="small text-muted mb-3">
+                                    Como usuario Premium tienes acceso directo al equipo de soporte.
+                                </p>
+                                <ul className="list-group list-group-flush">
+                                    {soporteVip.contactos.map((contacto) => (
+                                        <li key={contacto.nombre} className="list-group-item px-0">
+                                            <div className="fw-semibold">{contacto.nombre}</div>
+                                            <div className="small">
+                                                <i className="fa-solid fa-envelope me-2 text-primary"></i>{contacto.correo}
+                                            </div>
+                                            <div className="small">
+                                                <i className="fa-solid fa-phone me-2 text-success"></i>{contacto.telefono}
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn btn-outline-secondary"
+                                    onClick={() => setShowVipModal(false)}
+                                >
+                                    Cerrar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="modal-backdrop fade show"></div>
+            </>
+        )}
+        </>
     );
 };

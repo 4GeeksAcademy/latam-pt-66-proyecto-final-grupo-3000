@@ -290,6 +290,59 @@ h2 {
     border-bottom-color: #4da3ff !important;
 }
 
+/* Login/Register: forzar contraste correcto en campos de formulario */
+.dark-theme .auth-page .form-control,
+.dark-theme .auth-page .form-control.input-underlined {
+    background-color: #202833 !important;
+    color: #f5f8ff !important;
+    border-color: #3d4552 !important;
+}
+
+.dark-theme .auth-page .form-control::placeholder,
+.dark-theme .auth-page .form-control.input-underlined::placeholder {
+    color: #9fb0c7 !important;
+    opacity: 1;
+}
+
+.dark-theme .auth-page .form-control:focus,
+.dark-theme .auth-page .form-control.input-underlined:focus {
+    background-color: #202833 !important;
+    color: #ffffff !important;
+    border-color: #4da3ff !important;
+    box-shadow: 0 0 0 0.2rem rgba(77, 163, 255, 0.2) !important;
+}
+
+.dark-theme .auth-page .input-underlined {
+    border-bottom-color: #5f6875 !important;
+}
+
+.dark-theme .auth-page .position-relative .text-muted,
+.dark-theme .auth-page .form-check-label,
+.dark-theme .auth-page .btn-link.text-muted {
+    color: #c5d2e4 !important;
+}
+
+.dark-theme .auth-page {
+    background:
+        radial-gradient(circle at top left, rgba(77, 163, 255, 0.16), transparent 38%),
+        radial-gradient(circle at bottom right, rgba(0, 210, 255, 0.12), transparent 34%),
+        linear-gradient(180deg, #131a22 0%, #0f141b 100%) !important;
+}
+
+.dark-theme .auth-page .auth-card {
+    background-color: #1e2732 !important;
+    border: 1px solid #334155 !important;
+}
+
+.dark-theme .auth-page .auth-card .bg-white {
+    background-color: #1e2732 !important;
+    color: #f5f8ff !important;
+}
+
+.dark-theme .auth-page .auth-card .text-muted {
+    color: #b8c7d9 !important;
+}
+
 /* 6. Ajuste de modales o fondos secundarios */
 .dark-theme .modal-content {
     background-color: #2d2d2d !important;
